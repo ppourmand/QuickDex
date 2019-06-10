@@ -1,0 +1,72 @@
+//
+//  PokeApi.swift
+//  QuickDex
+//
+//  Created by Pasha Pourmand on 6/7/19.
+//  Copyright © 2019 Pasha Pourmand. All rights reserved.
+//
+
+import Foundation
+import Alamofire
+import SwiftyJSON
+
+class PokeApi: NSObject {
+    
+    let pokemonSearchEndpoint = "https://pokeapi.co/api/v2/pokemon/"
+    static let sharedInstance = PokeApi()
+    
+    private override init() {}
+    
+    public func getPokemonData(pokemonName: String, completionHandler: @escaping (Bool, Pokemon) -> Void) {
+        let urlEndpoint = URL(string: pokemonSearchEndpoint + pokemonName)!
+        
+        AF.request(urlEndpoint).responseJSON { response in
+            if let statusCode = response.response?.statusCode {
+                switch(statusCode) {
+                case 200:
+                    print("Successfully returned API call")
+                default:
+                    print("error status code: \(statusCode)")
+                    return
+                }
+                
+            }
+            if let result = response.result.value {
+                let jsonResponse = JSON(result)
+                
+                var types: [Type] = []
+                var stats: [String: Stat] = [:]
+                var pokemonId: String
+                var sprites: SpriteSet
+                
+                // grab the types
+                for type in jsonResponse["types"] {
+                    types.append(Type(name: JSON(type.1)["type"]["name"].stringValue))
+                }
+                
+                // grab the dex number
+                pokemonId = jsonResponse["id"].stringValue
+                
+                // grab the stats
+                for stat in jsonResponse["stats"] {
+                    let base = stat.1["base_stat"].stringValue
+                    let name = stat.1["stat"]["name"].stringValue
+                    let effort = stat.1["effort"].stringValue
+                    stats[name] = Stat(name, base, effort)
+                }
+                
+                // grab the sprites
+                let frontDefault = jsonResponse["sprites"]["front_default"].stringValue
+                let frontFemale = jsonResponse["sprites"]["front_female"].stringValue
+                let backDefault = jsonResponse["sprites"]["back_default"].stringValue
+                let backFemale = jsonResponse["sprites"]["back_female"].stringValue
+                    
+                sprites = SpriteSet(backDefault: backDefault, backFemale: backFemale, frontDefault: frontDefault, frontFemale: frontFemale)
+            
+                completionHandler(true, Pokemon(name: pokemonName, number: pokemonId, types: types, stats: stats , sprites: sprites) )
+
+            }
+                
+        }
+    }
+}
