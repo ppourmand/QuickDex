@@ -40,6 +40,8 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pokemonSearchField.delegate = self
+//        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))))
+        
         PokeApi.sharedInstance.getPokemonData(pokemonName: "bulbasaur", completionHandler: {(success, pokemon) in
             if (!success) {
                 print("Error calling API")
@@ -139,6 +141,11 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
         self.view.endEditing(true)
         textField.text = ""
         return false
+    }
+    
+    // hides keyboard after tapping outside of it
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     func downloadAndDisplaySprite(pokemonSpriteUrl: String) {
