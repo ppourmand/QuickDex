@@ -40,7 +40,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pokemonSearchField.delegate = self
-//        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))))
         
         PokeApi.sharedInstance.getPokemonData(pokemonName: "bulbasaur", completionHandler: {(success, pokemon) in
             if (!success) {
@@ -49,15 +48,18 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             else {
                 if let pokemon = pokemon {
                     self.currentPokemon = pokemon
-                    self.pokemonNameLabel.text = pokemon.name
-                    self.pokemonDexNumberLabel.text = "#\(pokemon.number)"
+                    
+                    var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
+                    prettyPokemonName = prettyPokemonName.capitalized
+                    self.pokemonNameLabel.text = prettyPokemonName
+                    self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon.number)"
                     
                     if pokemon.types.count == 2 {
-                        self.pokemonTypeOneLabel.text = pokemon.types[0].name
-                        self.pokemonTypeTwoLabel.text = pokemon.types[1].name
+                        self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
+                        self.pokemonTypeTwoLabel.text = pokemon.types[1].name.capitalized
                     }
                     else if pokemon.types.count == 1 {
-                        self.pokemonTypeOneLabel.text = pokemon.types[0].name
+                        self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
                         self.pokemonTypeTwoLabel.text = ""
                     }
                     else {
@@ -103,20 +105,22 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 else {
                     if let pokemon = pokemon {
                         self.currentPokemon = pokemon
-                        self.pokemonNameLabel.text = pokemon.name
-                        self.pokemonDexNumberLabel.text = "#\(pokemon.number)"
+                        var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
+                        prettyPokemonName = prettyPokemonName.capitalized
+                        self.pokemonNameLabel.text = prettyPokemonName
+                        self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon.number)"
                         
                         if pokemon.types.count == 2 {
-                            self.pokemonTypeOneLabel.text = pokemon.types[0].name
-                            self.pokemonTypeTwoLabel.text = pokemon.types[1].name
+                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
+                            self.pokemonTypeTwoLabel.text = pokemon.types[1].name.capitalized
                         }
                         else if pokemon.types.count == 1 {
-                            self.pokemonTypeOneLabel.text = pokemon.types[0].name
-                            self.pokemonTypeTwoLabel.text = ""
+                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
+                            self.pokemonTypeTwoLabel.text = " "
                         }
                         else {
-                            self.pokemonTypeOneLabel.text = ""
-                            self.pokemonTypeTwoLabel.text = ""
+                            self.pokemonTypeOneLabel.text = " "
+                            self.pokemonTypeTwoLabel.text = " "
                         }
                         
                         self.statViewController?.setStats(attackStat: pokemon.stats["attack"]!.baseStat, healthStat: pokemon.stats["hp"]!.baseStat, defenseStat: pokemon.stats["defense"]!.baseStat, specialAttackStat: pokemon.stats["special-attack"]!.baseStat, specialDefenseStat: pokemon.stats["special-defense"]!.baseStat, speedStat: pokemon.stats["speed"]!.baseStat)
