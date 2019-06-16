@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DFC1A01222B305C300EE0CB6 /* MarqueeLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */; };
+		DFC1A01422B305DF00EE0CB6 /* NotificationBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */; };
+		DFC1A01622B305E700EE0CB6 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01522B305E700EE0CB6 /* SnapKit.framework */; };
 		DFD7B64522A72E8F009A6032 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B64422A72E8F009A6032 /* AppDelegate.swift */; };
 		DFD7B64722A72E8F009A6032 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B64622A72E8F009A6032 /* ViewController.swift */; };
 		DFD7B64A22A72E8F009A6032 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFD7B64822A72E8F009A6032 /* Main.storyboard */; };
@@ -21,6 +24,7 @@
 		DFD7B68322AB22BD009A6032 /* PokemonStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */; };
 		DFD7B68522AB465A009A6032 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFD7B68422AB465A009A6032 /* Alamofire.framework */; };
 		DFD7B68722AB46B2009A6032 /* PokeApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B68622AB46B2009A6032 /* PokeApi.swift */; };
+		DFD7B68922B03E5B009A6032 /* TypesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B68822B03E5B009A6032 /* TypesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabel.framework; path = Carthage/Build/iOS/MarqueeLabel.framework; sourceTree = "<group>"; };
+		DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationBanner.framework; path = Carthage/Build/iOS/NotificationBanner.framework; sourceTree = "<group>"; };
+		DFC1A01522B305E700EE0CB6 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		DFD7B64122A72E8F009A6032 /* QuickDex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickDex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFD7B64422A72E8F009A6032 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DFD7B64622A72E8F009A6032 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +68,7 @@
 		DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonStatsTableViewController.swift; sourceTree = "<group>"; };
 		DFD7B68422AB465A009A6032 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		DFD7B68622AB46B2009A6032 /* PokeApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeApi.swift; sourceTree = "<group>"; };
+		DFD7B68822B03E5B009A6032 /* TypesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypesTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +77,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFD7B67822A77075009A6032 /* SwiftyJSON.framework in Frameworks */,
+				DFC1A01422B305DF00EE0CB6 /* NotificationBanner.framework in Frameworks */,
+				DFC1A01222B305C300EE0CB6 /* MarqueeLabel.framework in Frameworks */,
 				DFD7B68522AB465A009A6032 /* Alamofire.framework in Frameworks */,
+				DFC1A01622B305E700EE0CB6 /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +108,9 @@
 				DFD7B65B22A72E90009A6032 /* QuickDexTests */,
 				DFD7B66622A72E90009A6032 /* QuickDexUITests */,
 				DFD7B64222A72E8F009A6032 /* Products */,
+				DFC1A01522B305E700EE0CB6 /* SnapKit.framework */,
+				DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */,
+				DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */,
 				DFD7B68422AB465A009A6032 /* Alamofire.framework */,
 				DFD7B67722A77075009A6032 /* SwiftyJSON.framework */,
 			);
@@ -121,6 +135,7 @@
 				DFD7B68622AB46B2009A6032 /* PokeApi.swift */,
 				DFD7B67522A7396F009A6032 /* Pokemon.swift */,
 				DFD7B64822A72E8F009A6032 /* Main.storyboard */,
+				DFD7B68822B03E5B009A6032 /* TypesTableViewController.swift */,
 				DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */,
 				DFD7B64E22A72E90009A6032 /* Assets.xcassets */,
 				DFD7B65022A72E90009A6032 /* LaunchScreen.storyboard */,
@@ -286,6 +301,9 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SnapKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/NotificationBanner.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MarqueeLabel.framework",
 			);
 			outputFileListPaths = (
 			);
@@ -307,6 +325,7 @@
 				DFD7B67622A7396F009A6032 /* Pokemon.swift in Sources */,
 				DFD7B68722AB46B2009A6032 /* PokeApi.swift in Sources */,
 				DFD7B68122AB1DEC009A6032 /* PokedexViewController.swift in Sources */,
+				DFD7B68922B03E5B009A6032 /* TypesTableViewController.swift in Sources */,
 				DFD7B64522A72E8F009A6032 /* AppDelegate.swift in Sources */,
 				DFD7B64D22A72E8F009A6032 /* QuickDex.xcdatamodeld in Sources */,
 			);
