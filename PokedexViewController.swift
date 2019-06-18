@@ -147,10 +147,10 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
         return false
     }
     
-    // hides keyboard after tapping outside of it
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+//    // hides keyboard after tapping outside of it
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.view.endEditing(true)
+//    }
     
     func downloadAndDisplaySprite(pokemonSpriteUrl: String) {
         if !pokemonSpriteUrl.isEmpty {

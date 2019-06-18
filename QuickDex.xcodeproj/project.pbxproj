@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF59FEC022B8356500CDAE93 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */; };
 		DFC1A01222B305C300EE0CB6 /* MarqueeLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */; };
 		DFC1A01422B305DF00EE0CB6 /* NotificationBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */; };
 		DFC1A01622B305E700EE0CB6 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01522B305E700EE0CB6 /* SnapKit.framework */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabel.framework; path = Carthage/Build/iOS/MarqueeLabel.framework; sourceTree = "<group>"; };
 		DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationBanner.framework; path = Carthage/Build/iOS/NotificationBanner.framework; sourceTree = "<group>"; };
 		DFC1A01522B305E700EE0CB6 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				DFD7B68622AB46B2009A6032 /* PokeApi.swift */,
 				DFD7B67522A7396F009A6032 /* Pokemon.swift */,
 				DFD7B64822A72E8F009A6032 /* Main.storyboard */,
+				DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */,
 				DFD7B68822B03E5B009A6032 /* TypesTableViewController.swift */,
 				DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */,
 				DFD7B64E22A72E90009A6032 /* Assets.xcassets */,
@@ -327,6 +330,7 @@
 				DFD7B68122AB1DEC009A6032 /* PokedexViewController.swift in Sources */,
 				DFD7B68922B03E5B009A6032 /* TypesTableViewController.swift in Sources */,
 				DFD7B64522A72E8F009A6032 /* AppDelegate.swift in Sources */,
+				DF59FEC022B8356500CDAE93 /* TeamViewController.swift in Sources */,
 				DFD7B64D22A72E8F009A6032 /* QuickDex.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

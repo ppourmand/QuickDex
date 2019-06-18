@@ -269,7 +269,7 @@ struct Stat {
 }
 
 struct Type {
-    var name: String
+    var name: String = " "
     
     init(name: String) {
         self.name = name
