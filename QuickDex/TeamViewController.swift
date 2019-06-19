@@ -140,6 +140,8 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.pokemonTypeTwo?.text = typeTwo
         }
         
+        cell.pokemonSprite.image = nil
+        
         // grabbing the front sprite
         if let frontSpriteString = pokemon.value(forKey: "spriteUrl") as? String {
             let frontSpriteUrl = URL(string: frontSpriteString)!
