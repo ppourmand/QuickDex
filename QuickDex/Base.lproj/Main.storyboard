@@ -892,9 +892,9 @@
                                                 <rect key="frame" x="17" y="19" width="379" height="30"/>
                                                 <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                                 <connections>
-                                                    <action selector="searchPokedex:" destination="mYp-bj-fAl" eventType="editingDidEnd" id="LpB-uN-JAH"/>
+                                                    <action selector="searchPokedex:" destination="mYp-bj-fAl" eventType="primaryActionTriggered" id="eoE-IO-Y0s"/>
                                                 </connections>
                                             </textField>
                                             <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VZd-h3-nuA">

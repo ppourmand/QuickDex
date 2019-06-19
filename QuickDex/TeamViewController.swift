@@ -83,14 +83,8 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                                                 }
                                                 else {
                                                     if let pokemon = pokemon {
-//                                                        self.pokemonOnTeam.append(pokemon)
-                                                        if pokemon.types.count == 2 {
-                                                            self.save(name: pokemon.name, dexNumber: pokemon.number, typeOne: pokemon.types[0].name, typeTwo: pokemon.types[1].name, frontSprite: pokemon.sprites.frontDefault)
-                                                        }
-                                                        else {
-                                                            self.save(name: pokemon.name, dexNumber: pokemon.number, typeOne: pokemon.types[0].name, typeTwo: " ", frontSprite: pokemon.sprites.frontDefault)
-                                                        }
-                                                        
+                                                        print(pokemon.uniqueID)
+                                                        self.save(pokemonToSave: pokemon)
                                                         self.teamTableView.reloadData()
                                                     }
                                                     else {
@@ -136,7 +130,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // displaying dex number
 //        cell.pokemonDexNumber!.text = "National Dex: #\(pokemonOnTeam[indexPath.row].number)"
-        cell.pokemonDexNumber?.text = "National dex: #" + ((pokemon.value(forKey: "numberId") as? String)!)
+        cell.pokemonDexNumber?.text = (pokemon.value(forKey: "numberId") as? String)
         
         // displaying types
         if let typeOne = pokemon.value(forKey: "typeOne") as? String {
@@ -188,14 +182,14 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             // remove the item from the data model
             pokemonOnTeam.remove(at: indexPath.row)
 
-            self.delete(name: (pokemon.value(forKey: "name") as? String)!)
+            self.delete((pokemon.value(forKey: "uniqueId") as? UUID)!)
             teamTableView.deleteRows(at: [indexPath], with: .fade)
 
         }
     }
     
     // save the value into core data
-    func save(name: String, dexNumber: String, typeOne: String, typeTwo: String, frontSprite: String) {
+    func save(pokemonToSave: Pokemon) {
         print("attempting to save")
         
         guard let appDelegate =
@@ -216,24 +210,36 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                                    insertInto: managedContext)
         
         // 3
-        poke.setValue(name, forKeyPath: "name")
-        poke.setValue(dexNumber, forKey: "numberId")
-        poke.setValue(typeOne, forKey: "typeOne")
-        poke.setValue(typeTwo, forKey: "typeTwo")
-        poke.setValue(frontSprite, forKey: "spriteUrl")
+        
+        if pokemonToSave.types.count == 2 {
+            poke.setValue(pokemonToSave.name, forKeyPath: "name")
+            poke.setValue(pokemonToSave.number, forKey: "numberId")
+            poke.setValue(pokemonToSave.types[0].name, forKey: "typeOne")
+            poke.setValue(pokemonToSave.types[1].name, forKey: "typeTwo")
+            poke.setValue(pokemonToSave.sprites.frontDefault, forKey: "spriteUrl")
+            poke.setValue(pokemonToSave.uniqueID, forKey: "uniqueId")
+        }
+        else {
+            poke.setValue(pokemonToSave.name, forKeyPath: "name")
+            poke.setValue(pokemonToSave.number, forKey: "numberId")
+            poke.setValue(pokemonToSave.types[0].name, forKey: "typeOne")
+            poke.setValue(" ", forKey: "typeTwo")
+            poke.setValue(pokemonToSave.sprites.frontDefault, forKey: "spriteUrl")
+            poke.setValue(pokemonToSave.uniqueID, forKey: "uniqueId")
+        }
         
         // 4
         do {
             try managedContext.save()
             pokemonOnTeam.append(poke)
-            print("saved!!")
+            print("Appended pokemon and saved!!")
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
     }
     
     // delete pokemon from core data
-    func delete(name: String) {
+    func delete(_ idToDelete: UUID) {
         print("attempting to delete")
         
         guard let appDelegate =
@@ -243,7 +249,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PokemonTeamMember")
-        fetchRequest.predicate = NSPredicate(format: "name= %@", name)
+        fetchRequest.predicate = NSPredicate(format: "uniqueId= %@", idToDelete as CVarArg)
         
         do {
             let poke = try managedContext.fetch(fetchRequest)

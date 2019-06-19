@@ -16,6 +16,7 @@ class Pokemon {
     var stats: [String: Stat]
     var sprites: SpriteSet
     var typeEffectiveness = [String:Double]()
+    let uniqueID = UUID()
 //    var abilities: [Ability]
 //    var moves: [Move]
 //    var locationAreaEncountersUrl: String

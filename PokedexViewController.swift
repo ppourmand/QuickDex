@@ -93,7 +93,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func searchPokedex(_ sender: Any) {
-        
+                
         if var pokemonToSearch = self.pokemonSearchField.text {
             print(pokemonToSearch)
             
@@ -141,16 +141,18 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     }
     
     // hides keyboard after pressing search and clears the field
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        textField.text = ""
-        return false
-    }
-    
-//    // hides keyboard after tapping outside of it
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        //self.view.endEditing(true)
+//        //textField.text = ""
+//        textField.resignFirstResponder()
+//        return false
+//    }
+//
 //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        self.view.endEditing(true)
+//        pokemonSearchField.text = ""
 //    }
+
     
     func downloadAndDisplaySprite(pokemonSpriteUrl: String) {
         if !pokemonSpriteUrl.isEmpty {

@@ -6,8 +6,9 @@
         <attribute name="spriteUrl" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="typeOne" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="typeTwo" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PokemonTeamMember" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="PokemonTeamMember" positionX="-63" positionY="-18" width="128" height="135"/>
     </elements>
 </model>
