@@ -801,7 +801,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bgQ-Za-RB2"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Team" id="mvz-JU-sSJ"/>
+                    <tabBarItem key="tabBarItem" title="Team" image="TeamTabImage" id="mvz-JU-sSJ"/>
                     <connections>
                         <outlet property="teamTableView" destination="wkX-hb-tvP" id="fgQ-Fb-Znc"/>
                     </connections>
@@ -820,7 +820,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="xDq-XJ-SPD"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Settings" id="iEh-GO-2aP"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="SettingsTabImage" id="iEh-GO-2aP"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aEs-tU-kUe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -970,7 +970,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NKS-QC-jMA"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Pokedex" id="8bb-EX-wKB"/>
+                    <tabBarItem key="tabBarItem" title="Pokedex" image="PokedexTabImage" id="8bb-EX-wKB"/>
                     <size key="freeformSize" width="414" height="1600"/>
                     <connections>
                         <outlet property="pokemonDexNumberLabel" destination="cgP-zm-bN4" id="VPD-tm-Tgk"/>
@@ -1011,4 +1011,9 @@
             <point key="canvasLocation" x="-930" y="249"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="PokedexTabImage" width="30" height="30"/>
+        <image name="SettingsTabImage" width="30" height="30"/>
+        <image name="TeamTabImage" width="30" height="30"/>
+    </resources>
 </document>
