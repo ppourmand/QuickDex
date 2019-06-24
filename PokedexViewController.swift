@@ -24,6 +24,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     var currentSpriteIndex: Int = 0
     var statViewController: PokemonStatsTableViewController?
     var typeEffectivenessViewController: TypesTableViewController?
+    var matchupViewController: MatchupTableViewController?
     
     @IBAction func tappedSprite(_ sender: Any) {
         
@@ -48,6 +49,8 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             else {
                 if let pokemon = pokemon {
                     self.currentPokemon = pokemon
+                    self.matchupViewController?.searchedPokemon = pokemon
+                    self.matchupViewController?.tableView.reloadData()
                     
                     var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
                     prettyPokemonName = prettyPokemonName.capitalized
@@ -90,6 +93,9 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
         if (segue.identifier == "typeEffectivenessSegue") {
             self.typeEffectivenessViewController = segue.destination as? TypesTableViewController
         }
+        if (segue.identifier == "matchupSegue") {
+            self.matchupViewController = segue.destination as? MatchupTableViewController
+        }
     }
     
     @IBAction func searchPokedex(_ sender: Any) {
@@ -105,6 +111,9 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 else {
                     if let pokemon = pokemon {
                         self.currentPokemon = pokemon
+                        self.matchupViewController?.searchedPokemon = pokemon
+                        self.matchupViewController?.tableView.reloadData()
+
                         var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
                         prettyPokemonName = prettyPokemonName.capitalized
                         self.pokemonNameLabel.text = prettyPokemonName

@@ -32,20 +32,14 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         self.teamTableView.delegate = self
         self.teamTableView.dataSource = self
-        //1
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
+        self.teamTableView.tableFooterView = UIView()
+
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
-        
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        //2
-        let fetchRequest =
-            NSFetchRequest<NSManagedObject>(entityName: "PokemonTeamMember")
-        
-        //3
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "PokemonTeamMember")
+
         do {
             pokemonOnTeam = try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
@@ -184,8 +178,12 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             // remove the item from the data model
             pokemonOnTeam.remove(at: indexPath.row)
 
-            self.delete((pokemon.value(forKey: "uniqueId") as? UUID)!)
+            self.delete(pokemon)
             teamTableView.deleteRows(at: [indexPath], with: .fade)
+            
+            if pokemonOnTeam.isEmpty {
+                self.teamTableView.backgroundView = nil
+            }
 
         }
     }
@@ -241,7 +239,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // delete pokemon from core data
-    func delete(_ idToDelete: UUID) {
+    func delete(_ pokemonToDelete: NSManagedObject) {
         print("attempting to delete")
         
         guard let appDelegate =
@@ -250,14 +248,14 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PokemonTeamMember")
-        fetchRequest.predicate = NSPredicate(format: "uniqueId= %@", idToDelete as CVarArg)
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PokemonTeamMember")
+//        fetchRequest.predicate = NSPredicate(format: "uniqueId= %@", idToDelete as CVarArg)
         
         do {
-            let poke = try managedContext.fetch(fetchRequest)
+//            let poke = try managedContext.fetch(fetchRequest)
             
-            let pokeToDelete = poke[0] as! NSManagedObject
-            managedContext.delete(pokeToDelete)
+//            let pokeToDelete = poke[0] as! NSManagedObject
+            managedContext.delete(pokemonToDelete)
             print("successfully deleted!")
             
             do {
