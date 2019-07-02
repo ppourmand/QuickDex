@@ -8,9 +8,14 @@
 
 import UIKit
 import CoreData
+import QuartzCore
 
 class MatchupCell: UITableViewCell {
     @IBOutlet weak var pokemonName: UILabel!
+    @IBOutlet weak var typeOneLabel: UILabel!
+    @IBOutlet weak var typeTwoLabel: UILabel!
+    @IBOutlet weak var spriteView: UIImageView!
+    @IBOutlet weak var emptyLabel: UILabel!
 }
 
 class MatchupTableViewController: UITableViewController {
@@ -37,13 +42,7 @@ class MatchupTableViewController: UITableViewController {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        
-        if pokemonOnTeam.isEmpty {
-            self.tableView.isHidden = true
-        }
-        else {
-            self.tableView.isHidden = false
-        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,13 +58,6 @@ class MatchupTableViewController: UITableViewController {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
         
-        if pokemonOnTeam.isEmpty {
-            self.tableView.isHidden = true
-        }
-        else {
-            self.tableView.isHidden = false
-        }
-        
         self.tableView.reloadData()
         
     }
@@ -75,72 +67,95 @@ class MatchupTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(pokemonOnTeam.count)
-        return pokemonOnTeam.count
+        //return pokemonOnTeam.count
+        return 6
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "matchupPokemonCell", for: indexPath) as! MatchupCell
-        let pokemon = pokemonOnTeam[indexPath.row]
-        cell.pokemonName?.text = (pokemon.value(forKey: "name") as? String)?.capitalized
         
-        if let pokemonInDex = self.searchedPokemon {
-//            print(pokemonInDex.typeEffectiveness)
-            var totalEffectiveness: Double = 0.0
-
-            if let typeOne = pokemon.value(forKey: "typeOne") as? String {
-                print("type one of team poke: \(typeOne)")
-//                print(pokemonInDex.typeEffectiveness)
-                totalEffectiveness += self.isSuperEffectiveAgainst(pokemonInDex, typeOne)
-
-            }
-            if let typeTwo = pokemon.value(forKey: "typeTwo") as? String {
-                print("type two of team poke: \(typeTwo)")
-
-                if typeTwo != " " {
-                    totalEffectiveness += self.isSuperEffectiveAgainst(pokemonInDex, typeTwo)
-                }
-            }
-
-            print("dex poke: \(pokemonInDex.name) team poke: \(pokemon.value(forKey: "name"))")
-            print("totalEffectiveness: \(totalEffectiveness)")
-            
-            if totalEffectiveness >= 2 {
-                cell.backgroundColor = UIColor(hue: 0.3278, saturation: 1, brightness: 0.95, alpha: 1.0) /* #08f200 */
-            }
-            else if totalEffectiveness > 1 && totalEffectiveness < 2 {
-                cell.backgroundColor = UIColor(red: 1, green: 0.8, blue: 0, alpha: 1.0) /* #ffcc00 */
-            }
-            else if totalEffectiveness < 0 {
-                cell.backgroundColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0) /* #ff0000 */
-            }
-
-        }
-        
-//        cell.backgroundColor = UIColor(hue: 0.3278, saturation: 1, brightness: 0.95, alpha: 1.0) /* #08f200 */
-        return cell
-    }
- 
-    func isSuperEffectiveAgainst(_ pokemonInDex: Pokemon, _ pokemonOnTeamType: String) -> Double {
-        if pokemonInDex.typeEffectiveness[pokemonOnTeamType]! < 1 {
-            return -pokemonInDex.typeEffectiveness[pokemonOnTeamType]!
-        }
-        else if pokemonInDex.typeEffectiveness[pokemonOnTeamType]! == 1{
-            return 0
+        if indexPath.row >= pokemonOnTeam.count {
+            cell.pokemonName?.text = " "
+            cell.spriteView?.image = nil
+            cell.typeOneLabel?.text = " "
+            cell.typeTwoLabel?.text = " "
+            cell.emptyLabel.isHidden = false
         }
         else {
-            return pokemonInDex.typeEffectiveness[pokemonOnTeamType]!
+            cell.emptyLabel.isHidden = true
+            let pokemon = pokemonOnTeam[indexPath.row]
+            cell.pokemonName?.text = (pokemon.value(forKey: "name") as? String)?.capitalized
+            
+            if let pokemonInDex = self.searchedPokemon {
+                
+                if let typeOne = pokemon.value(forKey: "typeOne") as? String {
+                    if pokemonInDex.typeEffectiveness[typeOne]! >= 2.0 {
+                        let typeOneAttributedString = self.createAttributedString(typeOne, UIColor(red: 0.1804, green: 0.8, blue: 0.4431, alpha: 1.0))
+                        cell.typeOneLabel?.attributedText = typeOneAttributedString
+                    }
+                    else if pokemonInDex.typeEffectiveness[typeOne]! < 1.0 {
+                        let typeOneAttributedString = self.createAttributedString(typeOne, UIColor(red: 0.9059, green: 0.298, blue: 0.2353, alpha: 1.0))
+                        cell.typeOneLabel?.attributedText = typeOneAttributedString
+                    }
+                    else {
+                        let typeOneAttributedString = self.createAttributedString(typeOne, UIColor(red: 0.7412, green: 0.7647, blue: 0.7804, alpha: 1.0))
+                        cell.typeOneLabel?.attributedText = typeOneAttributedString
+                    }
+                }
+                if let typeTwo = pokemon.value(forKey: "typeTwo") as? String {
+                    if typeTwo != " "{
+                        if pokemonInDex.typeEffectiveness[typeTwo]! >= 2.0 {
+                            let typeTwoAttributedString = self.createAttributedString(typeTwo, SUPER_EFFECTIVE_COLOR)
+                            cell.typeTwoLabel?.attributedText = typeTwoAttributedString
+                        }
+                        else if pokemonInDex.typeEffectiveness[typeTwo]! < 1.0 {
+                            let typeTwoAttributedString = self.createAttributedString(typeTwo, NOT_VERY_EFFECTIVE_COLOR)
+                            cell.typeTwoLabel?.attributedText = typeTwoAttributedString
+                        }
+                        else {
+                            let typeTwoAttributedString = self.createAttributedString(typeTwo, NEUTRAL_EFFECTIVE_COLOR)
+                            cell.typeTwoLabel?.attributedText = typeTwoAttributedString
+                        }
+                    }
+                    else {
+                        cell.typeTwoLabel?.text =  " "
+                    }
+                }
+            }
+            
+            cell.spriteView.image = nil
+            
+            if let frontSpriteString = pokemon.value(forKey: "spriteUrl") as? String {
+                let frontSpriteUrl = URL(string: frontSpriteString)!
+                URLSession.shared.dataTask(with: frontSpriteUrl as URL, completionHandler: { (data, response, error) -> Void in
+                    if error != nil {
+                        print(error ?? "No Error")
+                        return
+                    }
+                    DispatchQueue.main.async(execute: { () -> Void in
+                        let image = UIImage(data: data!)
+                        cell.spriteView.image = image
+                    })
+                    
+                }).resume()
+            }
         }
-//
-//        if pokemonInDex.typeEffectiveness[pokemonOnTeamType]! > 1.0 {
-//            print("value of type: \(pokemonOnTeamType) value: \(pokemonInDex.typeEffectiveness[pokemonOnTeamType]!)")
-//            return 1
-//        }
-//        else {
-//            print("value of type: \(pokemonOnTeamType) value: \(pokemonInDex.typeEffectiveness[pokemonOnTeamType]!)")
-//            return -1
-//        }
+        
+        
+        return cell
     }
+    
+    func createAttributedString(_ typeString: String, _ colorToSet: UIColor) -> NSAttributedString{
+        
+        let firstAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: colorToSet]
+        
+        let attributedString = NSAttributedString(string: typeString.capitalized, attributes: firstAttributes)
+        
+        return attributedString
+        
+    }
+ 
 
     /*
     // Override to support conditional editing of the table view.

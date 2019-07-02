@@ -124,14 +124,14 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         // displaying dex number
 //        cell.pokemonDexNumber!.text = "National Dex: #\(pokemonOnTeam[indexPath.row].number)"
-        cell.pokemonDexNumber?.text = (pokemon.value(forKey: "numberId") as? String)
+        cell.pokemonDexNumber?.text = "National Dex #" + ((pokemon.value(forKey: "numberId") as? String)!)
         
         // displaying types
         if let typeOne = pokemon.value(forKey: "typeOne") as? String {
-            cell.pokemonTypeOne?.text = typeOne
+            cell.pokemonTypeOne?.text = typeOne.capitalized
         }
         if let typeTwo = pokemon.value(forKey: "typeTwo") as? String {
-            cell.pokemonTypeTwo?.text = typeTwo
+            cell.pokemonTypeTwo?.text = typeTwo.capitalized
         }
         
         cell.pokemonSprite.image = nil

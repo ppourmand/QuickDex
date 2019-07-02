@@ -54,5 +54,37 @@ class TypesTableViewController: UITableViewController {
         self.ghostEffectivenessLabel.text = "\(ghostEffectiveness)x"
         self.fairyEffectivenessLabel.text = "\(fairyEffectiveness)x"
         self.steelEffectivenessLabel.text = "\(steelEffectiveness)x"
+        
+        self.setColor(normalEffectiveness, self.normalEffectivenessLabel)
+        self.setColor(fireEffectiveness, self.fireEffectivenessLabel)
+        self.setColor(waterEffectiveness, self.waterEffectivenessLabel)
+        self.setColor(fightingEffectiveness, self.fightingEffectivenessLabel)
+        self.setColor(grassEffectiveness, self.grassEffectivenessLabel)
+        self.setColor(flyingEffectiveness, self.flyingEffectivenessLabel)
+        self.setColor(electricEffectiveness, self.electricEffectivenessLabel)
+        self.setColor(poisonEffectiveness, self.poisonEffectivenessLabel)
+        self.setColor(psychicEffectiveness, self.psychicEffectivenessLabel)
+        self.setColor(groundEffectiveness, self.groundEffectivenessLabel)
+        self.setColor(groundEffectiveness, self.groundEffectivenessLabel)
+        self.setColor(iceEffectiveness, self.iceEffectivenessLabel)
+        self.setColor(rockEffectiveness, self.rockEffectivenessLabel)
+        self.setColor(dragonEffectiveness, self.dragonEffectivenessLabel)
+        self.setColor(bugEffectiveness, self.bugEffectivenessLabel)
+        self.setColor(darkEffectiveness, self.darkEffectivenessLabel)
+        self.setColor(ghostEffectiveness, self.ghostEffectivenessLabel)
+        self.setColor(fairyEffectiveness, self.fairyEffectivenessLabel)
+        self.setColor(steelEffectiveness, self.steelEffectivenessLabel)
+    }
+    
+    func setColor(_ effectiveness: Double, _ labelToSet: UILabel){
+        if effectiveness >= 2.0 {
+            labelToSet.textColor = NOT_VERY_EFFECTIVE_COLOR
+        }
+        else if effectiveness < 1.0 {
+            labelToSet.textColor = SUPER_EFFECTIVE_COLOR
+        }
+        else {
+            labelToSet.textColor = NEUTRAL_EFFECTIVE_COLOR
+        }
     }
 }
