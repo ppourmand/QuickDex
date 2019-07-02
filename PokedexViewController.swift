@@ -28,7 +28,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     
     @IBAction func tappedSprite(_ sender: Any) {
         
-        if self.currentSpriteIndex == 3 {
+        if self.currentSpriteIndex == ((currentPokemon?.sprites.set.count)! - 1) {
             self.currentSpriteIndex = 0
         }
         else {

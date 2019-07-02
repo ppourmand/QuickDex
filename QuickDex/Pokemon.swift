@@ -250,10 +250,18 @@ struct SpriteSet {
         self.frontDefault = frontDefault
         self.frontFemale = frontFemale
         
-        self.set.append(frontDefault)
-        self.set.append(backDefault)
-        self.set.append(frontFemale)
-        self.set.append(backFemale)
+        if !frontDefault.isEmpty{
+            self.set.append(frontDefault)
+        }
+        if !backDefault.isEmpty{
+            self.set.append(backDefault)
+        }
+        if !frontFemale.isEmpty{
+            self.set.append(frontFemale)
+        }
+        if !backFemale.isEmpty{
+            self.set.append(backFemale)
+        }
     }
 }
 
