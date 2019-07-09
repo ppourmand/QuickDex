@@ -27,8 +27,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     var matchupViewController: MatchupTableViewController?
     
     @IBAction func tappedSprite(_ sender: Any) {
-        print("total sprite count: \(currentPokemon?.sprites.set.count)")
-        print("current sprite index: \(self.currentSpriteIndex)")
         
         if self.currentSpriteIndex == ((currentPokemon?.sprites.set.count)! - 1) {
             self.currentSpriteIndex = 0
@@ -50,7 +48,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             }
             else {
                 if let pokemon = pokemon {
-                    self.currentSpriteIndex = 0
                     self.currentPokemon = pokemon
                     self.matchupViewController?.searchedPokemon = pokemon
                     self.matchupViewController?.tableView.reloadData()
@@ -114,7 +111,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 else {
                     if let pokemon = pokemon {
                         self.currentPokemon = pokemon
-                        self.currentSpriteIndex = 0
                         self.matchupViewController?.searchedPokemon = pokemon
                         self.matchupViewController?.tableView.reloadData()
 
