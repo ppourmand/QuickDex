@@ -175,6 +175,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 }
                 else {
                     if let pokemon = pokemon {
+                        self.pokemonSearchField.text = ""
                         self.currentPokemon = pokemon
                         self.currentSpriteIndex = 0
                         self.matchupViewController?.searchedPokemon = pokemon
@@ -207,6 +208,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                     }
                     else    {
                         let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
+                        self.pokemonSearchField.text = ""
                         failBanner.show()
                     }
                 }
