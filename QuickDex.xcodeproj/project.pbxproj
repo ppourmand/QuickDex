@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF0F1C7822D53D3200072611 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F1C7722D53D3200072611 /* SettingsTableViewController.swift */; };
+		DF0F1C7C22D7F10300072611 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F1C7B22D7F10300072611 /* SettingsViewController.swift */; };
 		DF48981022BC2E8E008587EF /* MatchupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF48980F22BC2E8E008587EF /* MatchupTableViewController.swift */; };
 		DF59FEC022B8356500CDAE93 /* TeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */; };
 		DFC1A01222B305C300EE0CB6 /* MarqueeLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DF0F1C7722D53D3200072611 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		DF0F1C7B22D7F10300072611 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		DF48980F22BC2E8E008587EF /* MatchupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchupTableViewController.swift; sourceTree = "<group>"; };
 		DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamViewController.swift; sourceTree = "<group>"; };
 		DFC1A01122B305C300EE0CB6 /* MarqueeLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MarqueeLabel.framework; path = Carthage/Build/iOS/MarqueeLabel.framework; sourceTree = "<group>"; };
@@ -133,12 +137,14 @@
 		DFD7B64322A72E8F009A6032 /* QuickDex */ = {
 			isa = PBXGroup;
 			children = (
+				DF0F1C7722D53D3200072611 /* SettingsTableViewController.swift */,
 				DFD7B64422A72E8F009A6032 /* AppDelegate.swift */,
 				DFD7B64622A72E8F009A6032 /* ViewController.swift */,
 				DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */,
 				DFD7B68622AB46B2009A6032 /* PokeApi.swift */,
 				DFD7B67522A7396F009A6032 /* Pokemon.swift */,
 				DFD7B64822A72E8F009A6032 /* Main.storyboard */,
+				DF0F1C7B22D7F10300072611 /* SettingsViewController.swift */,
 				DF48980F22BC2E8E008587EF /* MatchupTableViewController.swift */,
 				DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */,
 				DFD7B68822B03E5B009A6032 /* TypesTableViewController.swift */,
@@ -329,6 +335,7 @@
 				DF48981022BC2E8E008587EF /* MatchupTableViewController.swift in Sources */,
 				DFD7B64722A72E8F009A6032 /* ViewController.swift in Sources */,
 				DFD7B68322AB22BD009A6032 /* PokemonStatsTableViewController.swift in Sources */,
+				DF0F1C7822D53D3200072611 /* SettingsTableViewController.swift in Sources */,
 				DFD7B67622A7396F009A6032 /* Pokemon.swift in Sources */,
 				DFD7B68722AB46B2009A6032 /* PokeApi.swift in Sources */,
 				DFD7B68122AB1DEC009A6032 /* PokedexViewController.swift in Sources */,
@@ -336,6 +343,7 @@
 				DFD7B64522A72E8F009A6032 /* AppDelegate.swift in Sources */,
 				DF59FEC022B8356500CDAE93 /* TeamViewController.swift in Sources */,
 				DFD7B64D22A72E8F009A6032 /* QuickDex.xcdatamodeld in Sources */,
+				DF0F1C7C22D7F10300072611 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

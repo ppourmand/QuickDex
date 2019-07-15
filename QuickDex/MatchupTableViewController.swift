@@ -58,6 +58,14 @@ class MatchupTableViewController: UITableViewController {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
         
+        // change the background color of the table itself based on mode
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            self.tableView.backgroundColor = UIColor.black
+        }
+        else {
+            self.tableView.backgroundColor = UIColor.white
+        }
+        
         self.tableView.reloadData()
         
     }
@@ -73,6 +81,16 @@ class MatchupTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "matchupPokemonCell", for: indexPath) as! MatchupCell
+        
+        // check if we're in dark mode or light mode, and color background appropiately
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            cell.backgroundColor = UIColor.black
+            cell.pokemonName.textColor = UIColor.white
+        }
+        else {
+            cell.backgroundColor = UIColor.white
+            cell.pokemonName.textColor = UIColor.black
+        }
         
         if indexPath.row >= pokemonOnTeam.count {
             cell.pokemonName?.text = " "

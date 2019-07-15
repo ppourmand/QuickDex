@@ -13,6 +13,7 @@ import CoreData
 let SUPER_EFFECTIVE_COLOR = UIColor(red: 0.1804, green: 0.8, blue: 0.4431, alpha: 1.0)
 let NOT_VERY_EFFECTIVE_COLOR = UIColor(red: 0.9059, green: 0.298, blue: 0.2353, alpha: 1.0)
 let NEUTRAL_EFFECTIVE_COLOR = UIColor(red: 0.7412, green: 0.7647, blue: 0.7804, alpha: 1.0)
+let DARK_MODE_BAR_COLOR = UIColor(red: 0.0667, green: 0.0667, blue: 0.0667, alpha: 1.0)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -24,6 +24,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     
     @IBOutlet weak var teamTableView: UITableView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
     var pokemonOnTeam: [NSManagedObject] = []
     var names: [String] = []
     
@@ -45,6 +46,32 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled"){
+            self.teamTableView.backgroundColor = UIColor.black
+            self.navigationBar.barTintColor = DARK_MODE_BAR_COLOR
+            self.navigationBar.isTranslucent = false
+            self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+
+            self.view.backgroundColor = DARK_MODE_BAR_COLOR
+        }
+        else {
+            self.teamTableView.backgroundColor = UIColor.white
+            self.navigationBar.barTintColor = UIColor.white
+            self.view.backgroundColor = UIColor.white
+            self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+
+
+        }
+        setNeedsStatusBarAppearanceUpdate()
+        self.teamTableView.reloadData()
+    }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UserDefaults.standard.bool(forKey: "darkModeEnabled") ? .lightContent : .default
     }
     
     @IBAction func addPokemonToTeam(_ sender: Any) {
@@ -103,6 +130,12 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         
+        
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            alert.view.backgroundColor = UIColor.black
+            alert.textFields?.first?.keyboardAppearance = .dark
+        }
+        
         present(alert, animated: true)
     }
     
@@ -117,6 +150,21 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCell") as! PokemonCell
         let pokemon = pokemonOnTeam[indexPath.row]
+        
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            cell.backgroundColor = UIColor.black
+            cell.pokemonName?.textColor = UIColor.white
+            cell.pokemonDexNumber?.textColor = UIColor.white
+            cell.pokemonTypeOne?.textColor = UIColor.white
+            cell.pokemonTypeTwo?.textColor = UIColor.white
+        }
+        else {
+            cell.backgroundColor = UIColor.white
+            cell.pokemonName?.textColor = UIColor.black
+            cell.pokemonDexNumber?.textColor = UIColor.black
+            cell.pokemonTypeOne?.textColor = UIColor.black
+            cell.pokemonTypeTwo?.textColor = UIColor.black
+        }
         
         // displaying name
 //        cell.pokemonName!.text = pokemonOnTeam[indexPath.row].name.capitalized
@@ -156,17 +204,6 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         return cell
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 
     // this method handles row deletion
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

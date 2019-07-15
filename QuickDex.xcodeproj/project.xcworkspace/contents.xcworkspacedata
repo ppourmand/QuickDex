@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:QuickDex.xcodeproj">
+      location = "group:/Users/pashapourmand/Documents/dev/personal/QuickDex/QuickDex/PokedexViewController.swift">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

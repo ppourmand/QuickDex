@@ -17,14 +17,19 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var pokemonTypeTwoLabel: UILabel!
     @IBOutlet weak var pokemonStatsTableView: UIView!
     @IBOutlet weak var pokemonSpriteImageView: UIImageView!
-
+    @IBOutlet weak var containerView: UIView!
+    
     @IBOutlet weak var pokemonSearchField: UITextField!
+    @IBOutlet weak var baseStatsLabel: UILabel!
+    @IBOutlet weak var typeEffectivenessLabel: UILabel!
+    @IBOutlet weak var typeMatchupsLabel: UILabel!
     
     var currentPokemon: Pokemon?
     var currentSpriteIndex: Int = 0
     var statViewController: PokemonStatsTableViewController?
     var typeEffectivenessViewController: TypesTableViewController?
     var matchupViewController: MatchupTableViewController?
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     @IBAction func tappedSprite(_ sender: Any) {
         
@@ -38,6 +43,63 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
         self.downloadAndDisplaySprite(pokemonSpriteUrl: (currentPokemon?.sprites.set[self.currentSpriteIndex])!)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        // here is the block of code for dark/light modes
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            print("enable dark mode")
+            self.tabBarController?.tabBar.barTintColor = DARK_MODE_BAR_COLOR
+            self.tabBarController?.tabBar.isTranslucent = false
+            self.containerView.backgroundColor = UIColor.black
+            
+            self.pokemonNameLabel.textColor = UIColor.white
+            self.pokemonDexNumberLabel.textColor = UIColor.white
+            self.pokemonTypeOneLabel.textColor = UIColor.white
+            self.pokemonTypeTwoLabel.textColor = UIColor.white
+            self.baseStatsLabel.textColor = UIColor.white
+            self.typeEffectivenessLabel.textColor = UIColor.white
+            self.typeMatchupsLabel.textColor = UIColor.white
+            self.pokemonSearchField.backgroundColor = UIColor.darkGray
+            self.pokemonSearchField.textColor = UIColor.white
+            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            self.pokemonSpriteImageView.backgroundColor = UIColor.black
+            self.pokemonSearchField.keyboardAppearance = .dark
+            
+            self.navigationBar.barTintColor = DARK_MODE_BAR_COLOR
+            self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+            self.view.backgroundColor = DARK_MODE_BAR_COLOR
+            
+        }
+        else {
+            print("enable light mode")
+            self.tabBarController?.tabBar.barTintColor = UIColor.white
+            self.containerView.backgroundColor = UIColor.white
+            self.view.backgroundColor = UIColor.white
+            self.navigationBar.barTintColor = UIColor.white
+            self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+
+            self.pokemonNameLabel.textColor = UIColor.black
+            self.pokemonDexNumberLabel.textColor = UIColor.black
+            self.pokemonTypeOneLabel.textColor = UIColor.black
+            self.pokemonTypeTwoLabel.textColor = UIColor.black
+            
+            self.baseStatsLabel.textColor = UIColor.black
+            self.typeEffectivenessLabel.textColor = UIColor.black
+            self.typeMatchupsLabel.textColor = UIColor.black
+            self.pokemonSearchField.backgroundColor = UIColor.white
+            self.pokemonSearchField.textColor = UIColor.black
+            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            self.pokemonSpriteImageView.backgroundColor = UIColor.white
+            self.pokemonSearchField.keyboardAppearance = .default
+
+
+        }
+        setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UserDefaults.standard.bool(forKey: "darkModeEnabled") ? .lightContent : .default
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pokemonSearchField.delegate = self
@@ -49,6 +111,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             else {
                 if let pokemon = pokemon {
                     self.currentPokemon = pokemon
+                    self.currentSpriteIndex = 0
                     self.matchupViewController?.searchedPokemon = pokemon
                     self.matchupViewController?.tableView.reloadData()
                     
@@ -99,6 +162,8 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func searchPokedex(_ sender: Any) {
+        
+        self.pokemonSearchField.endEditing(true)
                 
         if var pokemonToSearch = self.pokemonSearchField.text {
             print(pokemonToSearch)
@@ -111,6 +176,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 else {
                     if let pokemon = pokemon {
                         self.currentPokemon = pokemon
+                        self.currentSpriteIndex = 0
                         self.matchupViewController?.searchedPokemon = pokemon
                         self.matchupViewController?.tableView.reloadData()
 
@@ -148,20 +214,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             })
         }
     }
-    
-    // hides keyboard after pressing search and clears the field
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        //self.view.endEditing(true)
-//        //textField.text = ""
-//        textField.resignFirstResponder()
-//        return false
-//    }
-//
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.view.endEditing(true)
-//        pokemonSearchField.text = ""
-//    }
-
     
     func downloadAndDisplaySprite(pokemonSpriteUrl: String) {
         if !pokemonSpriteUrl.isEmpty {
