@@ -134,7 +134,6 @@ class TypesTableViewController: UITableViewController {
         self.setColor(poisonEffectiveness, self.poisonEffectivenessLabel)
         self.setColor(psychicEffectiveness, self.psychicEffectivenessLabel)
         self.setColor(groundEffectiveness, self.groundEffectivenessLabel)
-        self.setColor(groundEffectiveness, self.groundEffectivenessLabel)
         self.setColor(iceEffectiveness, self.iceEffectivenessLabel)
         self.setColor(rockEffectiveness, self.rockEffectivenessLabel)
         self.setColor(dragonEffectiveness, self.dragonEffectivenessLabel)
@@ -148,9 +147,15 @@ class TypesTableViewController: UITableViewController {
     func setColor(_ effectiveness: Double, _ labelToSet: UILabel){
         if effectiveness >= 2.0 {
             labelToSet.textColor = NOT_VERY_EFFECTIVE_COLOR
+            labelToSet.text = (labelToSet.text ?? "") + " (Weak to)"
         }
-        else if effectiveness < 1.0 {
+        else if effectiveness < 1.0 && effectiveness > 0.0 {
             labelToSet.textColor = SUPER_EFFECTIVE_COLOR
+            labelToSet.text = (labelToSet.text ?? "") + " (Resistant to)"
+        }
+        else if effectiveness == 0.0 {
+            labelToSet.textColor = SUPER_EFFECTIVE_COLOR
+            labelToSet.text = (labelToSet.text ?? "") + " (Immune to)"
         }
         else {
             labelToSet.textColor = NEUTRAL_EFFECTIVE_COLOR
