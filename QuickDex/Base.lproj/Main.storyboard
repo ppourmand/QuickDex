@@ -1090,7 +1090,7 @@
                                                     <outletCollection property="gestureRecognizers" destination="jDu-fl-1xx" appends="YES" id="6QC-mY-0Ab"/>
                                                 </connections>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type Matchups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAz-Nl-P6C">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Matchups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAz-Nl-P6C">
                                                 <rect key="frame" x="20" y="1470" width="349" height="48"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="vTF-bG-k3p"/>
