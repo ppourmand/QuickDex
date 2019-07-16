@@ -1203,6 +1203,7 @@
                             <constraint firstItem="GEb-lb-0dI" firstAttribute="top" secondItem="96e-LH-tFA" secondAttribute="top" constant="64" id="SK2-Qb-u95"/>
                             <constraint firstItem="NKS-QC-jMA" firstAttribute="trailing" secondItem="pZH-Mr-f75" secondAttribute="trailing" id="bhy-mx-idl"/>
                             <constraint firstItem="pZH-Mr-f75" firstAttribute="top" secondItem="NKS-QC-jMA" secondAttribute="top" id="gcm-Gi-4pX"/>
+                            <constraint firstItem="Oxx-Ns-V0B" firstAttribute="top" secondItem="NKS-QC-jMA" secondAttribute="top" constant="60" id="jpP-Ae-Wam"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NKS-QC-jMA"/>
                     </view>
