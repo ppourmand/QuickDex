@@ -14,7 +14,6 @@
 		DFC1A01422B305DF00EE0CB6 /* NotificationBanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01322B305DF00EE0CB6 /* NotificationBanner.framework */; };
 		DFC1A01622B305E700EE0CB6 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC1A01522B305E700EE0CB6 /* SnapKit.framework */; };
 		DFD7B64522A72E8F009A6032 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B64422A72E8F009A6032 /* AppDelegate.swift */; };
-		DFD7B64722A72E8F009A6032 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B64622A72E8F009A6032 /* ViewController.swift */; };
 		DFD7B64A22A72E8F009A6032 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFD7B64822A72E8F009A6032 /* Main.storyboard */; };
 		DFD7B64D22A72E8F009A6032 /* QuickDex.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B64B22A72E8F009A6032 /* QuickDex.xcdatamodeld */; };
 		DFD7B64F22A72E90009A6032 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFD7B64E22A72E90009A6032 /* Assets.xcassets */; };
@@ -56,7 +55,6 @@
 		DFC1A01522B305E700EE0CB6 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		DFD7B64122A72E8F009A6032 /* QuickDex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickDex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFD7B64422A72E8F009A6032 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DFD7B64622A72E8F009A6032 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DFD7B64922A72E8F009A6032 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DFD7B64C22A72E8F009A6032 /* QuickDex.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QuickDex.xcdatamodel; sourceTree = "<group>"; };
 		DFD7B64E22A72E90009A6032 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 			children = (
 				DF0F1C7722D53D3200072611 /* SettingsTableViewController.swift */,
 				DFD7B64422A72E8F009A6032 /* AppDelegate.swift */,
-				DFD7B64622A72E8F009A6032 /* ViewController.swift */,
 				DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */,
 				DFD7B68622AB46B2009A6032 /* PokeApi.swift */,
 				DFD7B67522A7396F009A6032 /* Pokemon.swift */,
@@ -330,7 +327,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF48981022BC2E8E008587EF /* MatchupTableViewController.swift in Sources */,
-				DFD7B64722A72E8F009A6032 /* ViewController.swift in Sources */,
 				DFD7B68322AB22BD009A6032 /* PokemonStatsTableViewController.swift in Sources */,
 				DF0F1C7822D53D3200072611 /* SettingsTableViewController.swift in Sources */,
 				DFD7B67622A7396F009A6032 /* Pokemon.swift in Sources */,
