@@ -22,7 +22,7 @@ class PokeApi: NSObject {
         
         if !pokemonName.isEmpty {
             if let urlEndPoint = URL(string: pokemonSearchEndpoint + pokemonName + "/") {
-                AF.request(urlEndPoint).responseJSON { response in
+                Alamofire.request(urlEndPoint).responseJSON { response in
                     if let statusCode = response.response?.statusCode {
                         switch(statusCode) {
                         case 200:
