@@ -20,6 +20,11 @@ class PokeApi: NSObject {
     
     public func getPokemonData(pokemonName: String, completionHandler: @escaping (Bool, Pokemon?) -> Void) {
         
+        // we should do input validation here
+        // if it contains any special character, return bad input
+        // if the length is > 100, return "input too long"
+        // if its just all empty spaces, return bad input
+        
         if !pokemonName.isEmpty {
             if let urlEndPoint = URL(string: pokemonSearchEndpoint + pokemonName + "/") {
                 Alamofire.request(urlEndPoint).responseJSON { response in

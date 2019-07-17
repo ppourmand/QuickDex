@@ -18,6 +18,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var pokemonStatsTableView: UIView!
     @IBOutlet weak var pokemonSpriteImageView: UIImageView!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var pokemonSearchField: UITextField!
     @IBOutlet weak var baseStatsLabel: UILabel!
@@ -50,7 +51,6 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             self.tabBarController?.tabBar.barTintColor = DARK_MODE_BAR_COLOR
             self.tabBarController?.tabBar.isTranslucent = false
             self.containerView.backgroundColor = UIColor.black
-            
             self.pokemonNameLabel.textColor = UIColor.white
             self.pokemonDexNumberLabel.textColor = UIColor.white
             self.pokemonTypeOneLabel.textColor = UIColor.white
@@ -63,11 +63,10 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             self.pokemonSpriteImageView.backgroundColor = UIColor.black
             self.pokemonSearchField.keyboardAppearance = .dark
-            
             self.navigationBar.barTintColor = DARK_MODE_BAR_COLOR
             self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
             self.view.backgroundColor = DARK_MODE_BAR_COLOR
-            
+            self.scrollView.backgroundColor = UIColor.black
         }
         else {
             print("enable light mode")
@@ -76,12 +75,10 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             self.view.backgroundColor = UIColor.white
             self.navigationBar.barTintColor = UIColor.white
             self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
-
             self.pokemonNameLabel.textColor = UIColor.black
             self.pokemonDexNumberLabel.textColor = UIColor.black
             self.pokemonTypeOneLabel.textColor = UIColor.black
             self.pokemonTypeTwoLabel.textColor = UIColor.black
-            
             self.baseStatsLabel.textColor = UIColor.black
             self.typeEffectivenessLabel.textColor = UIColor.black
             self.typeMatchupsLabel.textColor = UIColor.black
@@ -90,8 +87,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             self.pokemonSpriteImageView.backgroundColor = UIColor.white
             self.pokemonSearchField.keyboardAppearance = .default
-
-
+            self.scrollView.backgroundColor = UIColor.white
         }
         setNeedsStatusBarAppearanceUpdate()
     }
@@ -167,8 +163,8 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
                 
         if var pokemonToSearch = self.pokemonSearchField.text {
             print(pokemonToSearch)
-            
-            pokemonToSearch = pokemonToSearch.replacingOccurrences(of: " ", with: "-")
+                        
+           // pokemonToSearch = pokemonToSearch.replacingOccurrences(of: " ", with: "-")
             PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, completionHandler: {(success, pokemon) in
                 if (!success) {
                     print("Error calling API")
