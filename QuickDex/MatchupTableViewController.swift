@@ -144,7 +144,14 @@ class MatchupTableViewController: UITableViewController {
             cell.spriteView.image = nil
             
             if let frontSpriteString = pokemon.value(forKey: "spriteUrl") as? String {
-                let frontSpriteUrl = URL(string: frontSpriteString)!
+                var frontSpriteUrl: URL
+                
+                if frontSpriteString.isEmpty {
+                    frontSpriteUrl = URL(string: POKEMON_MISSING_SPRITE_URL)!
+                }
+                else {
+                    frontSpriteUrl = URL(string: frontSpriteString)!
+                }
                 URLSession.shared.dataTask(with: frontSpriteUrl as URL, completionHandler: { (data, response, error) -> Void in
                     if error != nil {
                         print(error ?? "No Error")

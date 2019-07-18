@@ -20,13 +20,9 @@ class PokeApi: NSObject {
     
     public func getPokemonData(pokemonName: String, completionHandler: @escaping (Bool, Pokemon?) -> Void) {
         
-        // we should do input validation here
-        // if it contains any special character, return bad input
-        // if the length is > 100, return "input too long"
-        // if its just all empty spaces, return bad input
-        
-        if !pokemonName.isEmpty {
-            if let urlEndPoint = URL(string: pokemonSearchEndpoint + pokemonName + "/") {
+        if isValidInput(pokemonName) {
+            let convertedPokemonName = convertUserInputToApiReadable(pokemonName)
+            if let urlEndPoint = URL(string: pokemonSearchEndpoint + convertedPokemonName + "/") {
                 Alamofire.request(urlEndPoint).responseJSON { response in
                     if let statusCode = response.response?.statusCode {
                         switch(statusCode) {
@@ -83,10 +79,59 @@ class PokeApi: NSObject {
                 
             }
             else {
-                let failBanner = StatusBarNotificationBanner(title: "Bad input", style: .danger)
+                let failBanner = StatusBarNotificationBanner(title: "Bad Input", style: .danger)
                 failBanner.show()
             }
         }
+        else {
+            let failBanner = StatusBarNotificationBanner(title: "Bad Input", style: .danger)
+            failBanner.show()
+        }
         
+    }
+    
+    private func isValidInput(_ inputPokemon: String) -> Bool{
+        // we should do input validation here
+        // if it contains any special character, return bad input
+        // if the length is > 100, return "input too long"
+        // if its just all empty spaces, return bad input
+        let characterset = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -’.'")
+        let invertedCharacterSet = characterset.inverted
+        var lastOccurredSpecialCharacter = Unicode.Scalar(0)
+        var occurencesOfSpecialCharacter: Int = 0
+        
+        if inputPokemon.isEmpty || inputPokemon.count > 100 {
+            return false
+        }
+        
+        if inputPokemon.rangeOfCharacter(from: invertedCharacterSet) != nil {
+            return false
+        }
+        
+        for character in inputPokemon.unicodeScalars {
+            
+            if occurencesOfSpecialCharacter > 1 && character == lastOccurredSpecialCharacter {
+                return false
+            }
+            
+            if invertedCharacterSet.contains(character) || character == " " {
+                lastOccurredSpecialCharacter = character
+                occurencesOfSpecialCharacter += 1
+            }
+            else {
+                occurencesOfSpecialCharacter = 0
+            }
+        }
+        
+        return true
+    }
+    
+    private func convertUserInputToApiReadable(_ userInput: String) -> String {
+        var convertedOutput = ""
+        convertedOutput = userInput.replacingOccurrences(of: " ", with: "-").lowercased()
+        convertedOutput = convertedOutput.replacingOccurrences(of: "’", with: "")
+        convertedOutput = convertedOutput.replacingOccurrences(of: ".", with: "")
+        convertedOutput = convertedOutput.replacingOccurrences(of: "'", with: "")
+        return convertedOutput
     }
 }

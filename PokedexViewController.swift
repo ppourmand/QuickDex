@@ -33,15 +33,15 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var navigationBar: UINavigationBar!
     
     @IBAction func tappedSprite(_ sender: Any) {
-        
-        if self.currentSpriteIndex == ((currentPokemon?.sprites.set.count)! - 1) {
-            self.currentSpriteIndex = 0
+        if (currentPokemon?.sprites.set.count)! != 0 {
+            if self.currentSpriteIndex == ((currentPokemon?.sprites.set.count)! - 1) {
+                self.currentSpriteIndex = 0
+            }
+            else {
+                self.currentSpriteIndex += 1
+            }
+            self.downloadAndDisplaySprite(pokemonSpriteUrl: (currentPokemon?.sprites.set[self.currentSpriteIndex])!)
         }
-        else {
-            self.currentSpriteIndex += 1
-        }
-        
-        self.downloadAndDisplaySprite(pokemonSpriteUrl: (currentPokemon?.sprites.set[self.currentSpriteIndex])!)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -214,20 +214,25 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     }
     
     func downloadAndDisplaySprite(pokemonSpriteUrl: String) {
-        if !pokemonSpriteUrl.isEmpty {
-            let frontSpriteUrl = URL(string: pokemonSpriteUrl)!
-            URLSession.shared.dataTask(with: frontSpriteUrl as URL, completionHandler: { (data, response, error) -> Void in
-                if error != nil {
-                    print(error ?? "No Error")
-                    return
-                }
-                DispatchQueue.main.async(execute: { () -> Void in
-                    let image = UIImage(data: data!)
-                    self.pokemonSpriteImageView.image = image
-                })
-                
-            }).resume()
+        var frontSpriteUrl: URL
+        
+        if pokemonSpriteUrl.isEmpty {
+            frontSpriteUrl = URL(string: POKEMON_MISSING_SPRITE_URL)!
         }
+        else {
+            frontSpriteUrl = URL(string: pokemonSpriteUrl)!
+        }
+        URLSession.shared.dataTask(with: frontSpriteUrl as URL, completionHandler: { (data, response, error) -> Void in
+            if error != nil {
+                print(error ?? "No Error")
+                return
+            }
+            DispatchQueue.main.async(execute: { () -> Void in
+                let image = UIImage(data: data!)
+                self.pokemonSpriteImageView.image = image
+            })
+            
+        }).resume()
     }
 }
 

@@ -249,7 +249,7 @@ struct SpriteSet {
         self.backFemale = backFemale
         self.frontDefault = frontDefault
         self.frontFemale = frontFemale
-        
+
         if !frontDefault.isEmpty{
             self.set.append(frontDefault)
         }
