@@ -9,8 +9,49 @@
 import UIKit
 import NotificationBanner
 
-class PokedexViewController: UIViewController, UITextFieldDelegate{
+class AutocompleteCell: UITableViewCell {
+    @IBOutlet weak var pokemonNameLabel: UILabel!
+}
 
+class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if autocompleteSuggestions.count > 5 {
+            return 5
+        }
+        return autocompleteSuggestions.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "autocompleteName") as! AutocompleteCell
+        
+        cell.pokemonNameLabel?.text = autocompleteSuggestions[indexPath.row]
+        
+        if UserDefaults.standard.bool(forKey: "darkModeEnabled") {
+            cell.backgroundColor = DARK_MODE_BAR_COLOR
+            cell.pokemonNameLabel.textColor = UIColor.white
+        }
+        else {
+            cell.backgroundColor = UIColor(red: 237/255, green: 237/255, blue: 237/255, alpha: 1.0) /* #ededed */
+            cell.pokemonNameLabel.textColor = UIColor.black
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let cellWhereIsTheLabel = tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0)) as! AutocompleteCell
+        self.pokemonSearchField.text = cellWhereIsTheLabel.pokemonNameLabel.text
+        self.autocompleteTableView.isHidden = true
+        self.searchPokedex(self)
+    }
+    
+    // keeping track of autocomplete stuff
+    var autocompleteSuggestions: [String] = []
+    
+    @IBOutlet weak var autocompleteTableView: UITableView!
+    
     @IBOutlet weak var pokemonNameLabel: UILabel!
     @IBOutlet weak var pokemonDexNumberLabel: UILabel!
     @IBOutlet weak var pokemonTypeOneLabel: UILabel!
@@ -31,6 +72,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     var typeEffectivenessViewController: TypesTableViewController?
     var matchupViewController: MatchupTableViewController?
     @IBOutlet weak var navigationBar: UINavigationBar!
+
     
     @IBAction func tappedSprite(_ sender: Any) {
         if (currentPokemon?.sprites.set.count)! != 0 {
@@ -98,6 +140,12 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.autocompleteTableView.delegate = self
+        self.autocompleteTableView.dataSource = self
+//        self.autocompleteTableView.layer.borderWidth = 1.5
+//        self.autocompleteTableView.layer.borderColor = (UIColor.lightGray).cgColor
+        self.autocompleteTableView.layer.cornerRadius = 10
+        
         self.pokemonSearchField.delegate = self
         
         PokeApi.sharedInstance.getPokemonData(pokemonName: "bulbasaur", completionHandler: {(success, pokemon) in
@@ -160,8 +208,9 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
     @IBAction func searchPokedex(_ sender: Any) {
         
         self.pokemonSearchField.endEditing(true)
-                
-        if var pokemonToSearch = self.pokemonSearchField.text {
+        self.autocompleteTableView.isHidden = true
+
+        if let pokemonToSearch = self.pokemonSearchField.text {
             print(pokemonToSearch)
                         
            // pokemonToSearch = pokemonToSearch.replacingOccurrences(of: " ", with: "-")
@@ -234,6 +283,54 @@ class PokedexViewController: UIViewController, UITextFieldDelegate{
             
         }).resume()
     }
+    
+    @IBAction func userTypingPokemon(_ sender: Any) {
+        // on each letter typed, search for the substring (from left to right, not just in middle,
+        // and display to user the top 5 in alphabetical order
+        var newTableHeight = 0
+        
+        if let partialString = self.pokemonSearchField?.text {
+            self.autocompleteSuggestions = findPokemonSubString(partialString)
+            
+            print("number of suggestions: \(self.autocompleteSuggestions.count)")
+            
+            if self.autocompleteSuggestions.count > 5 {
+                self.autocompleteSuggestions = Array(self.autocompleteSuggestions.prefix(upTo: 5))
+            }
+            else {
+                self.autocompleteSuggestions = Array(self.autocompleteSuggestions.prefix(upTo: self.autocompleteSuggestions.count))
+            }
+            
+            newTableHeight = 49 * (5 - self.autocompleteSuggestions.count)
+            
+            if self.autocompleteSuggestions.isEmpty || partialString.isEmpty {
+                print("autocomplete suggestions is empty or partial string is empty")
+                self.autocompleteTableView.isHidden = true
+                self.autocompleteTableView.frame = CGRect(x: self.autocompleteTableView.frame.origin.x,
+                                                          y: self.autocompleteTableView.frame.origin.y,
+                                                          width: self.autocompleteTableView.frame.size.width,
+                                                          height: 245.0)
+            }
+            else {
+                self.autocompleteTableView.isHidden = false
+                self.autocompleteTableView.frame = CGRect(x: self.autocompleteTableView.frame.origin.x,
+                                                          y: self.autocompleteTableView.frame.origin.y,
+                                                          width: self.autocompleteTableView.frame.size.width,
+                                                          height: 245.0 - CGFloat(newTableHeight))
+            }
+            
+            self.autocompleteTableView.reloadData()
+        }
+    }
+    
+    private func findPokemonSubString(_ partialText: String) -> [String] {
+        // return an array of matched strings
+        // return 5 of them
+        let filteredPokemon = POKEMON_NAMES.filter({(item: String) -> Bool in
+            let stringMatch = item.lowercased().hasPrefix(partialText.lowercased())
+            return stringMatch
+        })
+        
+        return filteredPokemon
+    }
 }
-
-
