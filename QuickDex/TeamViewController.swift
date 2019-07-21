@@ -27,6 +27,8 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var navigationBar: UINavigationBar!
     var pokemonOnTeam: [NSManagedObject] = []
     var names: [String] = []
+    var lettersTypedSoFar: String = ""
+    var oldCursorPosition: Int = 0
     
     
     override func viewDidLoad() {
@@ -75,6 +77,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func addPokemonToTeam(_ sender: Any) {
+        self.oldCursorPosition = 0
         
         let alert = UIAlertController(title: "New Pokemon",
                                       message: "Add a new Pokemon to the team",
@@ -95,7 +98,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                                             let nameToSave = textField.text else {
                                                 return
                                         }
-                                        
+                                                                                
                                         if self.pokemonOnTeam.count < MAX_POKEMON {
                                             let pokemonToSearch = nameToSave.replacingOccurrences(of: " ", with: "-")
                                             PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, completionHandler: {(success, pokemon) in
@@ -125,7 +128,11 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cancelAction = UIAlertAction(title: "Cancel",
                                          style: .cancel)
         
-        alert.addTextField()
+        alert.addTextField { (textField: UITextField) in
+            
+            textField.placeholder = "Name or pokedex number"
+            textField.addTarget(self, action: #selector(TeamViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
+        }
         
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
@@ -137,6 +144,53 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         present(alert, animated: true)
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        print("--- text field edited ---")
+        var autocompleteSuggestions: [String] = []
+
+        if let selectedRange = textField.selectedTextRange {
+            let cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.end)
+            oldCursorPosition = cursorPosition - oldCursorPosition
+//            print("cursor position: \(cursorPosition)")
+//            print("old cursor position: \(oldCursorPosition)")
+            
+
+            
+            if let partialString = textField.text {
+                print("partial string: \(partialString)")
+                if !partialString.isEmpty{
+                    self.lettersTypedSoFar = String(partialString[..<partialString.index(partialString.startIndex, offsetBy: cursorPosition)])
+                    print("letters typed so far: \(self.lettersTypedSoFar)")
+                    autocompleteSuggestions = findPokemonSubString(self.lettersTypedSoFar)
+                }
+            }
+            
+            
+            
+            if let suggestedText = autocompleteSuggestions.first {
+                print("suggested text: \(suggestedText)")
+                let typedText = NSMutableAttributedString(string: self.lettersTypedSoFar)
+                let greyedOutSuggestedText = NSMutableAttributedString(string: String(suggestedText.suffix(suggestedText.count - self.lettersTypedSoFar.count)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+                
+                typedText.append(greyedOutSuggestedText)
+                
+                
+                textField.attributedText = typedText
+            }
+            else {
+                textField.text = self.lettersTypedSoFar
+            }
+            
+            if let newPosition = textField.position(from: textField.beginningOfDocument, offset: cursorPosition) {
+                textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+            }
+            
+            if lettersTypedSoFar.isEmpty {
+                textField.text = ""
+            }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

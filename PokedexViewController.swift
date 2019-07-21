@@ -109,6 +109,8 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
             self.view.backgroundColor = DARK_MODE_BAR_COLOR
             self.scrollView.backgroundColor = UIColor.black
+            self.autocompleteTableView.backgroundColor = UIColor.black
+
         }
         else {
             print("enable light mode")
@@ -130,6 +132,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.pokemonSpriteImageView.backgroundColor = UIColor.white
             self.pokemonSearchField.keyboardAppearance = .default
             self.scrollView.backgroundColor = UIColor.white
+            self.autocompleteTableView.backgroundColor = UIColor.white
         }
         setNeedsStatusBarAppearanceUpdate()
     }
@@ -323,14 +326,16 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    private func findPokemonSubString(_ partialText: String) -> [String] {
-        // return an array of matched strings
-        // return 5 of them
-        let filteredPokemon = POKEMON_NAMES.filter({(item: String) -> Bool in
-            let stringMatch = item.lowercased().hasPrefix(partialText.lowercased())
-            return stringMatch
-        })
-        
-        return filteredPokemon
-    }
+
+}
+
+public func findPokemonSubString(_ partialText: String) -> [String] {
+    // return an array of matched strings
+    // return 5 of them
+    let filteredPokemon = POKEMON_NAMES.filter({(item: String) -> Bool in
+        let stringMatch = item.lowercased().hasPrefix(partialText.lowercased())
+        return stringMatch
+    })
+    
+    return filteredPokemon
 }

@@ -1,3 +1,4 @@
 - fix issue where a pokemon with no front sprite added to team and team matchups tables was crashing the app
 - fix issue where a pokemon with no sprites causes a crash when tapping to view back/front sprites in pokedex
 - add autosuggest to pokedex
+- add autosuggest to teams
