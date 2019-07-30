@@ -153,6 +153,9 @@ class PokeApi: NSObject {
         
     }
     
+    // TODO: create function that adds move data to the pokemon
+    
+    
     private func isValidInput(_ inputPokemon: String) -> Bool{
         // we should do input validation here
         // if it contains any special character, return bad input

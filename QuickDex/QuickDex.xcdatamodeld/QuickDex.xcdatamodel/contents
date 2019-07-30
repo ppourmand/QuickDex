@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Move" representedClassName="Move" syncable="YES" codeGenerationType="class">
+        <attribute name="accuracy" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="damageClass" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="effectChance" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="flavorText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="generation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="power" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pp" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="priority" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="target" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="moves" inverseEntity="Pokemon" syncable="YES"/>
+    </entity>
     <entity name="Pokemon" representedClassName="Pokemon" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="numberId" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
@@ -7,6 +21,7 @@
         <attribute name="typeOne" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="typeTwo" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="uniqueId" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move" syncable="YES"/>
         <relationship name="sprites" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SpriteUrl" inverseName="pokemon" inverseEntity="SpriteUrl" syncable="YES"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Stat" inverseName="pokemon" inverseEntity="Stat" syncable="YES"/>
         <relationship name="typeEffectiveness" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="pokemon" inverseEntity="Type" syncable="YES"/>
@@ -27,9 +42,10 @@
         <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="typeEffectiveness" inverseEntity="Pokemon" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="178"/>
+        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="Stat" positionX="198.66796875" positionY="97.16015625" width="128" height="88"/>
         <element name="SpriteUrl" positionX="203.46484375" positionY="21.72265625" width="128" height="88"/>
         <element name="Type" positionX="199.140625" positionY="188.86328125" width="128" height="88"/>
+        <element name="Move" positionX="108" positionY="153" width="128" height="225"/>
     </elements>
 </model>
