@@ -25,7 +25,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @IBOutlet weak var teamTableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
-    var pokemonOnTeam: [NSManagedObject] = []
+    var pokemonOnTeam: [Pokemon] = []
     var names: [String] = []
     var lettersTypedSoFar: String = ""
     var oldCursorPosition: Int = 0
@@ -41,10 +41,11 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                 return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "PokemonTeamMember")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Pokemon")
+        fetchRequest.predicate = NSPredicate(format: "uniqueId != nil")
 
         do {
-            pokemonOnTeam = try managedContext.fetch(fetchRequest)
+            pokemonOnTeam = try managedContext.fetch(fetchRequest) as! [Pokemon]
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
@@ -101,22 +102,42 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                                                                                 
                                         if self.pokemonOnTeam.count < MAX_POKEMON {
                                             let pokemonToSearch = nameToSave.replacingOccurrences(of: " ", with: "-")
-                                            PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, completionHandler: {(success, pokemon) in
+                                            PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, uniqueID: UUID(), completionHandler: {(success, convertedPokemonName) in
                                                 if (!success) {
                                                     print("Error calling API in TeamViewController")
                                                 }
                                                 else {
-                                                    if let pokemon = pokemon {
-                                                        print(pokemon.uniqueID)
-                                                        self.save(pokemonToSave: pokemon)
-                                                        self.teamTableView.reloadData()
+                                                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                                                    let managedContext = appDelegate.persistentContainer.viewContext
+                                                    let pokemonFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pokemon")
+                                                    pokemonFetchRequest.predicate = NSPredicate(format: "uniqueId != nil")
+                                                    
+                                                    // 4
+                                                    do {
+                                                        let result = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
+                                                        print(result)
+                                                        self.pokemonOnTeam = result
+                                                        print("Appended pokemon and saved!!")
+                                                    } catch let error as NSError {
+                                                        print("Could not save. \(error), \(error.userInfo)")
                                                     }
-                                                    else {
-                                                        let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
-                                                        failBanner.show()
-                                                    }
+//                                                    let result = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
+//
+//                                                    print(result)
+                                                    
+//                                                    if let pokemon = pokemon {
+//                                                        print(pokemon.uniqueId)
+//                                                        self.save(pokemonToSave: pokemon)
+//                                                        self.teamTableView.reloadData()
+//                                                    }
+//                                                    else {
+//                                                        let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
+//                                                        failBanner.show()
+//                                                    }
+                                                    print("gj saved ur shit to team")
+                                                    self.teamTableView.reloadData()
                                                 }
-                                                
+
                                             })
                                         }
                                         else {
@@ -130,7 +151,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         alert.addTextField { (textField: UITextField) in
             
-            textField.placeholder = "Name or pokedex number"
+            textField.placeholder = "Pokemon Name"
             textField.addTarget(self, action: #selector(TeamViewController.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
         }
         
@@ -147,7 +168,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        print("--- text field edited ---")
+        //print("--- text field edited ---")
         var autocompleteSuggestions: [String] = []
 
         if let selectedRange = textField.selectedTextRange {
@@ -159,10 +180,10 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
 
             
             if let partialString = textField.text {
-                print("partial string: \(partialString)")
+               // print("partial string: \(partialString)")
                 if !partialString.isEmpty{
                     self.lettersTypedSoFar = String(partialString[..<partialString.index(partialString.startIndex, offsetBy: cursorPosition)])
-                    print("letters typed so far: \(self.lettersTypedSoFar)")
+                    //print("letters typed so far: \(self.lettersTypedSoFar)")
                     autocompleteSuggestions = findPokemonSubString(self.lettersTypedSoFar)
                 }
             }
@@ -170,7 +191,7 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             
             if let suggestedText = autocompleteSuggestions.first {
-                print("suggested text: \(suggestedText)")
+               // print("suggested text: \(suggestedText)")
                 let typedText = NSMutableAttributedString(string: self.lettersTypedSoFar)
                 let greyedOutSuggestedText = NSMutableAttributedString(string: String(suggestedText.suffix(suggestedText.count - self.lettersTypedSoFar.count)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
                 
@@ -221,32 +242,33 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         // displaying name
-//        cell.pokemonName!.text = pokemonOnTeam[indexPath.row].name.capitalized
-        cell.pokemonName?.text = (pokemon.value(forKey: "name") as? String)?.capitalized
+        cell.pokemonName.text = pokemon.name?.capitalized
         
         // displaying dex number
-//        cell.pokemonDexNumber!.text = "National Dex: #\(pokemonOnTeam[indexPath.row].number)"
-        cell.pokemonDexNumber?.text = "National Dex #" + ((pokemon.value(forKey: "numberId") as? String)!)
+        cell.pokemonDexNumber.text = "National Dex #" + pokemon.numberId!
         
         // displaying types
-        if let typeOne = pokemon.value(forKey: "typeOne") as? String {
-            cell.pokemonTypeOne?.text = typeOne.capitalized
+        cell.pokemonTypeOne?.text = pokemon.typeOne?.capitalized
+        if pokemon.typeTwo != "\"\"" {
+            cell.pokemonTypeTwo?.text = pokemon.typeTwo?.capitalized
         }
-        if let typeTwo = pokemon.value(forKey: "typeTwo") as? String {
-            cell.pokemonTypeTwo?.text = typeTwo.capitalized
+        else {
+            cell.pokemonTypeTwo?.text = " "
         }
+
         
         cell.pokemonSprite.image = nil
         
-        // grabbing the front sprite
-        if let frontSpriteString = pokemon.value(forKey: "spriteUrl") as? String {
+        if let spritesArray = pokemon.sprites?.allObjects as? [SpriteUrl] {
+            let frontDefaultSprite = spritesArray.filter({$0.direction == "frontDefault"}).first?.url
+            
             var frontSpriteUrl: URL
-
-            if frontSpriteString.isEmpty {
+            
+            if frontDefaultSprite!.isEmpty {
                 frontSpriteUrl = URL(string: POKEMON_MISSING_SPRITE_URL)!
             }
             else {
-                frontSpriteUrl = URL(string: frontSpriteString)!
+                frontSpriteUrl = URL(string: frontDefaultSprite!)!
             }
             URLSession.shared.dataTask(with: frontSpriteUrl as URL, completionHandler: { (data, response, error) -> Void in
                 if error != nil {
@@ -261,8 +283,6 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
             }).resume()
             
         }
-        
-        
         
         return cell
     }
@@ -286,80 +306,30 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
 
         }
     }
-    
-    // save the value into core data
-    func save(pokemonToSave: Pokemon) {
-        print("attempting to save")
-        
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        
-        // 1
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        // 2
-        let entity =
-            NSEntityDescription.entity(forEntityName: "PokemonTeamMember",
-                                       in: managedContext)!
-        
-        let poke = NSManagedObject(entity: entity,
-                                   insertInto: managedContext)
-        
-        // 3
-        
-        if pokemonToSave.types.count == 2 {
-            poke.setValue(pokemonToSave.name, forKeyPath: "name")
-            poke.setValue(pokemonToSave.number, forKey: "numberId")
-            poke.setValue(pokemonToSave.types[0].name, forKey: "typeOne")
-            poke.setValue(pokemonToSave.types[1].name, forKey: "typeTwo")
-            poke.setValue(pokemonToSave.sprites.frontDefault, forKey: "spriteUrl")
-            poke.setValue(pokemonToSave.uniqueID, forKey: "uniqueId")
-        }
-        else {
-            poke.setValue(pokemonToSave.name, forKeyPath: "name")
-            poke.setValue(pokemonToSave.number, forKey: "numberId")
-            poke.setValue(pokemonToSave.types[0].name, forKey: "typeOne")
-            poke.setValue(" ", forKey: "typeTwo")
-            poke.setValue(pokemonToSave.sprites.frontDefault, forKey: "spriteUrl")
-            poke.setValue(pokemonToSave.uniqueID, forKey: "uniqueId")
-        }
-        
-        // 4
-        do {
-            try managedContext.save()
-            pokemonOnTeam.append(poke)
-            print("Appended pokemon and saved!!")
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
-    }
-    
+
     // delete pokemon from core data
-    func delete(_ pokemonToDelete: NSManagedObject) {
+    func delete(_ pokemonToDelete: Pokemon) {
         print("attempting to delete")
-        
+
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
-        
+
         let managedContext = appDelegate.persistentContainer.viewContext
-//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "PokemonTeamMember")
-//        fetchRequest.predicate = NSPredicate(format: "uniqueId= %@", idToDelete as CVarArg)
-        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pokemon")
+        fetchRequest.predicate = NSPredicate(format: "uniqueId == %@", pokemonToDelete.uniqueId! as CVarArg)
+
         do {
-//            let poke = try managedContext.fetch(fetchRequest)
-            
-//            let pokeToDelete = poke[0] as! NSManagedObject
-            managedContext.delete(pokemonToDelete)
-            print("successfully deleted!")
-            
+            let matchedPokemon = try managedContext.fetch(fetchRequest) as! [Pokemon]
+
+            let pokeToDelete = matchedPokemon.first
+            managedContext.delete(pokeToDelete!)
+            print("Successfully deleted pokemon: \(pokemonToDelete.name!)")
+
             do {
                 try managedContext.save()
-                print("sucessfully saved the delete action")
+                print("Sucessfully saved the delete action")
             }
             catch {
                 print("Unable to save during a delete in core data: \(error)")

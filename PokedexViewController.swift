@@ -8,6 +8,7 @@
 
 import UIKit
 import NotificationBanner
+import CoreData
 
 class AutocompleteCell: UITableViewCell {
     @IBOutlet weak var pokemonNameLabel: UILabel!
@@ -75,15 +76,15 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
 
     
     @IBAction func tappedSprite(_ sender: Any) {
-        if (currentPokemon?.sprites.set.count)! != 0 {
-            if self.currentSpriteIndex == ((currentPokemon?.sprites.set.count)! - 1) {
-                self.currentSpriteIndex = 0
-            }
-            else {
-                self.currentSpriteIndex += 1
-            }
-            self.downloadAndDisplaySprite(pokemonSpriteUrl: (currentPokemon?.sprites.set[self.currentSpriteIndex])!)
-        }
+        
+        let directions = ["backDefault", "frontFemale", "backFemale", "frontDefault"]
+        
+//        if let spritesArray = currentPokemon?.sprites?.allObjects as? [SpriteUrl] {
+//            let frontDefaultSprite = spritesArray.filter({$0.direction == "frontDefault"}).first?.url
+//            self.downloadAndDisplaySprite(pokemonSpriteUrl: frontDefaultSprite!)
+//        }
+
+        print("tapped on sprite")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,7 +103,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.typeMatchupsLabel.textColor = UIColor.white
             self.pokemonSearchField.backgroundColor = UIColor.darkGray
             self.pokemonSearchField.textColor = UIColor.white
-            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
+            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Pokemon Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
             self.pokemonSpriteImageView.backgroundColor = UIColor.black
             self.pokemonSearchField.keyboardAppearance = .dark
             self.navigationBar.barTintColor = DARK_MODE_BAR_COLOR
@@ -128,7 +129,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.typeMatchupsLabel.textColor = UIColor.black
             self.pokemonSearchField.backgroundColor = UIColor.white
             self.pokemonSearchField.textColor = UIColor.black
-            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Name or pokedex number", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+            self.pokemonSearchField.attributedPlaceholder = NSAttributedString(string: "Pokemon Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             self.pokemonSpriteImageView.backgroundColor = UIColor.white
             self.pokemonSearchField.keyboardAppearance = .default
             self.scrollView.backgroundColor = UIColor.white
@@ -145,51 +146,111 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
         super.viewDidLoad()
         self.autocompleteTableView.delegate = self
         self.autocompleteTableView.dataSource = self
-//        self.autocompleteTableView.layer.borderWidth = 1.5
-//        self.autocompleteTableView.layer.borderColor = (UIColor.lightGray).cgColor
         self.autocompleteTableView.layer.cornerRadius = 10
         
         self.pokemonSearchField.delegate = self
         
-        PokeApi.sharedInstance.getPokemonData(pokemonName: "bulbasaur", completionHandler: {(success, pokemon) in
+        PokeApi.sharedInstance.getPokemonData(pokemonName: "bulbasaur", completionHandler: {(success, convertedPokemonName) in
             if (!success) {
                 print("Error calling API")
             }
             else {
-                if let pokemon = pokemon {
-                    self.currentPokemon = pokemon
-                    self.currentSpriteIndex = 0
-                    self.matchupViewController?.searchedPokemon = pokemon
-                    self.matchupViewController?.tableView.reloadData()
+                print("successful return")
+                
+                // coredata context getting
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                let managedContext = appDelegate.persistentContainer.viewContext
+                var pokemon: Pokemon?
+                
+                // fetch the pokemon data (in this case, always bulbasaur on viewdidload)
+                do {
+                    let pokemonFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pokemon")
+                    pokemonFetchRequest.predicate = NSPredicate(format: "name == %@", convertedPokemonName)
+                    let results = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
+                    pokemon = results[0]
                     
-                    var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
-                    prettyPokemonName = prettyPokemonName.capitalized
-                    self.pokemonNameLabel.text = prettyPokemonName
-                    self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon.number)"
-                    
-                    if pokemon.types.count == 2 {
-                        self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
-                        self.pokemonTypeTwoLabel.text = pokemon.types[1].name.capitalized
-                    }
-                    else if pokemon.types.count == 1 {
-                        self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
-                        self.pokemonTypeTwoLabel.text = ""
-                    }
-                    else {
-                        self.pokemonTypeOneLabel.text = ""
-                        self.pokemonTypeTwoLabel.text = ""
-                    }
-                    
-                    self.statViewController?.setStats(attackStat: pokemon.stats["attack"]!.baseStat, healthStat: pokemon.stats["hp"]!.baseStat, defenseStat: pokemon.stats["defense"]!.baseStat, specialAttackStat: pokemon.stats["special-attack"]!.baseStat, specialDefenseStat: pokemon.stats["special-defense"]!.baseStat, speedStat: pokemon.stats["speed"]!.baseStat)
-                    
-                    // downloads the sprite and displays it in the imageview
-                    self.downloadAndDisplaySprite(pokemonSpriteUrl: pokemon.sprites.frontDefault)
-                    
-                    self.typeEffectivenessViewController?.setEffectivenessValues(normalEffectiveness: pokemon.typeEffectiveness["normal"]!, fireEffectiveness: pokemon.typeEffectiveness["fire"]!, waterEffectiveness: pokemon.typeEffectiveness["water"]!, fightingEffectiveness: pokemon.typeEffectiveness["fighting"]!, grassEffectiveness: pokemon.typeEffectiveness["grass"]!, flyingEffectiveness: pokemon.typeEffectiveness["flying"]!, electricEffectiveness: pokemon.typeEffectiveness["electric"]!, poisonEffectiveness: pokemon.typeEffectiveness["poison"]!, psychicEffectiveness: pokemon.typeEffectiveness["psychic"]!, groundEffectiveness: pokemon.typeEffectiveness["ground"]!, iceEffectiveness: pokemon.typeEffectiveness["ice"]!, rockEffectiveness: pokemon.typeEffectiveness["rock"]!, dragonEffectiveness: pokemon.typeEffectiveness["dragon"]!, bugEffectiveness: pokemon.typeEffectiveness["bug"]!, darkEffectiveness: pokemon.typeEffectiveness["dark"]!, ghostEffectiveness: pokemon.typeEffectiveness["ghost"]!, fairyEffectiveness: pokemon.typeEffectiveness["fairy"]!, steelEffectiveness: pokemon.typeEffectiveness["steel"]!)
+                } catch let error as NSError {
+                    print("Error: \(error), \(error.userInfo)")
                 }
-                else {
-                    let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
-                    failBanner.show()
+                
+                self.currentPokemon = pokemon
+                
+                // send the pokemon that we searched to the matchup view controller and reload the data
+                self.matchupViewController?.searchedPokemon = pokemon
+                self.matchupViewController?.tableView.reloadData()
+                
+                var prettyPokemonName = pokemon?.name!.replacingOccurrences(of: "-", with: " ")
+                prettyPokemonName = prettyPokemonName?.capitalized
+                self.pokemonNameLabel.text = prettyPokemonName
+                self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon?.numberId ?? "")"
+
+                // set the type labels, if it only has 1 type, the other should not be set
+                if pokemon?.typeOne != "" {
+                    self.pokemonTypeOneLabel.text = pokemon?.typeOne?.capitalized
+                }
+                if pokemon?.typeTwo != "" {
+                    self.pokemonTypeTwoLabel.text = pokemon?.typeTwo?.capitalized
+                }
+                
+
+                if let statsArray = pokemon?.stats?.allObjects as? [Stat] {
+                    var attackStat = ""
+                    var healthStat = ""
+                    var defenseStat = ""
+                    var specialAttackStat = ""
+                    var specialDefenseStat = ""
+                    var speedStat = ""
+                    
+                    for stat in statsArray {
+                        if stat.name == "attack" {
+                            attackStat = stat.baseStat!
+                        }
+                        if stat.name == "defense" {
+                            defenseStat = stat.baseStat!
+                        }
+                        if stat.name == "hp" {
+                            healthStat = stat.baseStat!
+                        }
+                        if stat.name == "special-attack" {
+                            specialAttackStat = stat.baseStat!
+                        }
+                        if stat.name == "special-defense" {
+                            specialDefenseStat = stat.baseStat!
+                        }
+                        if stat.name == "speed" {
+                            speedStat = stat.baseStat!
+                        }
+                    }
+                    
+                    self.statViewController?.setStats(attackStat: attackStat, healthStat: healthStat, defenseStat: defenseStat, specialAttackStat: specialAttackStat, specialDefenseStat: specialDefenseStat, speedStat: speedStat)
+                }
+                
+                if let effectivenessArray = pokemon?.typeEffectiveness?.allObjects as? [Type] {
+                    let normal = effectivenessArray.filter({$0.name == "normal"}).first
+                    let fire = effectivenessArray.filter({$0.name == "fire"}).first
+                    let water = effectivenessArray.filter({$0.name == "water"}).first
+                    let fighting = effectivenessArray.filter({$0.name == "fighting"}).first
+                    let grass = effectivenessArray.filter({$0.name == "grass"}).first
+                    let flying = effectivenessArray.filter({$0.name == "flying"}).first
+                    let electric = effectivenessArray.filter({$0.name == "electric"}).first
+                    let poison = effectivenessArray.filter({$0.name == "poison"}).first
+                    let psychic = effectivenessArray.filter({$0.name == "psychic"}).first
+                    let ground = effectivenessArray.filter({$0.name == "ground"}).first
+                    let ice = effectivenessArray.filter({$0.name == "ice"}).first
+                    let rock = effectivenessArray.filter({$0.name == "rock"}).first
+                    let dragon = effectivenessArray.filter({$0.name == "dragon"}).first
+                    let bug = effectivenessArray.filter({$0.name == "bug"}).first
+                    let dark = effectivenessArray.filter({$0.name == "dark"}).first
+                    let ghost = effectivenessArray.filter({$0.name == "ghost"}).first
+                    let fairy = effectivenessArray.filter({$0.name == "fairy"}).first
+                    let steel = effectivenessArray.filter({$0.name == "steel"}).first
+                    
+                    self.typeEffectivenessViewController?.setEffectivenessValues(normalEffectiveness: normal!.effectiveness, fireEffectiveness: fire!.effectiveness, waterEffectiveness: water!.effectiveness, fightingEffectiveness: fighting!.effectiveness, grassEffectiveness: grass!.effectiveness, flyingEffectiveness: flying!.effectiveness, electricEffectiveness: electric!.effectiveness, poisonEffectiveness: poison!.effectiveness, psychicEffectiveness: psychic!.effectiveness, groundEffectiveness: ground!.effectiveness, iceEffectiveness: ice!.effectiveness, rockEffectiveness: rock!.effectiveness, dragonEffectiveness: dragon!.effectiveness, bugEffectiveness: bug!.effectiveness, darkEffectiveness: dark!.effectiveness, ghostEffectiveness: ghost!.effectiveness, fairyEffectiveness: fairy!.effectiveness, steelEffectiveness: steel!.effectiveness)
+                }
+                
+                if let spritesArray = pokemon?.sprites?.allObjects as? [SpriteUrl] {
+                    let frontDefaultSprite = spritesArray.filter({$0.direction == "frontDefault"}).first?.url
+                    self.downloadAndDisplaySprite(pokemonSpriteUrl: frontDefaultSprite!)
                 }
             }
             
@@ -214,53 +275,155 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
         self.autocompleteTableView.isHidden = true
 
         if let pokemonToSearch = self.pokemonSearchField.text {
-            print(pokemonToSearch)
-                        
-           // pokemonToSearch = pokemonToSearch.replacingOccurrences(of: " ", with: "-")
-            PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, completionHandler: {(success, pokemon) in
+            PokeApi.sharedInstance.getPokemonData(pokemonName: pokemonToSearch, completionHandler: {(success, convertedPokemonName) in
                 if (!success) {
                     print("Error calling API")
                 }
                 else {
-                    if let pokemon = pokemon {
-                        self.pokemonSearchField.text = ""
-                        self.currentPokemon = pokemon
-                        self.currentSpriteIndex = 0
-                        self.matchupViewController?.searchedPokemon = pokemon
-                        self.matchupViewController?.tableView.reloadData()
+                    // coredata context getting
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                    let managedContext = appDelegate.persistentContainer.viewContext
+                    var pokemon: Pokemon?
+                    
+                    // fetch the pokemon data
+                    do {
+                        let pokemonFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pokemon")
+                        pokemonFetchRequest.predicate = NSPredicate(format: "name == %@", convertedPokemonName)
+                        print("converted pokemon: \(convertedPokemonName)")
+                        let results = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
+                        pokemon = results[0]
+                        
+                    } catch let error as NSError {
+                        print("Error: \(error), \(error.userInfo)")
+                    }
+                    
+                    // send the pokemon that we searched to the matchup view controller and reload the data
+                    self.matchupViewController?.searchedPokemon = pokemon
+                    self.matchupViewController?.tableView.reloadData()
+                    
+                    self.currentPokemon = pokemon
+                    var prettyPokemonName = pokemon?.name!.replacingOccurrences(of: "-", with: " ")
+                    prettyPokemonName = prettyPokemonName?.capitalized
+                    self.pokemonSearchField.text = ""
+                    self.pokemonNameLabel.text = prettyPokemonName
+                    self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon?.numberId ?? "")"
+                    
 
-                        var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
-                        prettyPokemonName = prettyPokemonName.capitalized
-                        self.pokemonNameLabel.text = prettyPokemonName
-                        self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon.number)"
+                    if pokemon?.typeOne != "\"\"" {
+                        self.pokemonTypeOneLabel.text = pokemon?.typeOne?.capitalized
+                    }
+                    
+                    // for some reason if it doesn't have a second type it literally has the quotation characters instead of empty strings
+                    // TODO: fix that
+                    if pokemon?.typeTwo != "\"\"" {
+                        self.pokemonTypeTwoLabel.text = pokemon?.typeTwo?.capitalized
+                    }
+                    else {
+                        self.pokemonTypeTwoLabel.text = " "
+                    }
+                    
+                    if let statsArray = pokemon?.stats?.allObjects as? [Stat] {
+                        var attackStat = ""
+                        var healthStat = ""
+                        var defenseStat = ""
+                        var specialAttackStat = ""
+                        var specialDefenseStat = ""
+                        var speedStat = ""
                         
-                        if pokemon.types.count == 2 {
-                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
-                            self.pokemonTypeTwoLabel.text = pokemon.types[1].name.capitalized
-                        }
-                        else if pokemon.types.count == 1 {
-                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
-                            self.pokemonTypeTwoLabel.text = " "
-                        }
-                        else {
-                            self.pokemonTypeOneLabel.text = " "
-                            self.pokemonTypeTwoLabel.text = " "
+                        for stat in statsArray {
+                            if stat.name == "attack" {
+                                attackStat = stat.baseStat!
+                            }
+                            if stat.name == "defense" {
+                                defenseStat = stat.baseStat!
+                            }
+                            if stat.name == "hp" {
+                                healthStat = stat.baseStat!
+                            }
+                            if stat.name == "special-attack" {
+                                specialAttackStat = stat.baseStat!
+                            }
+                            if stat.name == "special-defense" {
+                                specialDefenseStat = stat.baseStat!
+                            }
+                            if stat.name == "speed" {
+                                speedStat = stat.baseStat!
+                            }
                         }
                         
-                        self.statViewController?.setStats(attackStat: pokemon.stats["attack"]!.baseStat, healthStat: pokemon.stats["hp"]!.baseStat, defenseStat: pokemon.stats["defense"]!.baseStat, specialAttackStat: pokemon.stats["special-attack"]!.baseStat, specialDefenseStat: pokemon.stats["special-defense"]!.baseStat, speedStat: pokemon.stats["speed"]!.baseStat)
+                        self.statViewController?.setStats(attackStat: attackStat, healthStat: healthStat, defenseStat: defenseStat, specialAttackStat: specialAttackStat, specialDefenseStat: specialDefenseStat, speedStat: speedStat)
                         
+                    }
+                    
+                    if let effectivenessArray = pokemon?.typeEffectiveness?.allObjects as? [Type] {
+                        let normal = effectivenessArray.filter({$0.name == "normal"}).first
+                        let fire = effectivenessArray.filter({$0.name == "fire"}).first
+                        let water = effectivenessArray.filter({$0.name == "water"}).first
+                        let fighting = effectivenessArray.filter({$0.name == "fighting"}).first
+                        let grass = effectivenessArray.filter({$0.name == "grass"}).first
+                        let flying = effectivenessArray.filter({$0.name == "flying"}).first
+                        let electric = effectivenessArray.filter({$0.name == "electric"}).first
+                        let poison = effectivenessArray.filter({$0.name == "poison"}).first
+                        let psychic = effectivenessArray.filter({$0.name == "psychic"}).first
+                        let ground = effectivenessArray.filter({$0.name == "ground"}).first
+                        let ice = effectivenessArray.filter({$0.name == "ice"}).first
+                        let rock = effectivenessArray.filter({$0.name == "rock"}).first
+                        let dragon = effectivenessArray.filter({$0.name == "dragon"}).first
+                        let bug = effectivenessArray.filter({$0.name == "bug"}).first
+                        let dark = effectivenessArray.filter({$0.name == "dark"}).first
+                        let ghost = effectivenessArray.filter({$0.name == "ghost"}).first
+                        let fairy = effectivenessArray.filter({$0.name == "fairy"}).first
+                        let steel = effectivenessArray.filter({$0.name == "steel"}).first
+                        
+                        self.typeEffectivenessViewController?.setEffectivenessValues(normalEffectiveness: normal!.effectiveness, fireEffectiveness: fire!.effectiveness, waterEffectiveness: water!.effectiveness, fightingEffectiveness: fighting!.effectiveness, grassEffectiveness: grass!.effectiveness, flyingEffectiveness: flying!.effectiveness, electricEffectiveness: electric!.effectiveness, poisonEffectiveness: poison!.effectiveness, psychicEffectiveness: psychic!.effectiveness, groundEffectiveness: ground!.effectiveness, iceEffectiveness: ice!.effectiveness, rockEffectiveness: rock!.effectiveness, dragonEffectiveness: dragon!.effectiveness, bugEffectiveness: bug!.effectiveness, darkEffectiveness: dark!.effectiveness, ghostEffectiveness: ghost!.effectiveness, fairyEffectiveness: fairy!.effectiveness, steelEffectiveness: steel!.effectiveness)
+                    }
+
+                    if let spritesArray = pokemon?.sprites?.allObjects as? [SpriteUrl] {
+                        let frontDefaultSprite = spritesArray.filter({$0.direction == "frontDefault"}).first?.url
+                        self.downloadAndDisplaySprite(pokemonSpriteUrl: frontDefaultSprite!)
+                    }
+                    
+
+                    
+//                    if let pokemon = pokemon {
+//                        self.pokemonSearchField.text = ""
+//                        self.currentPokemon = pokemon
+//                        self.currentSpriteIndex = 0
+//                        self.matchupViewController?.searchedPokemon = pokemon
+//                        self.matchupViewController?.tableView.reloadData()
+//
+//                        var prettyPokemonName = pokemon.name.replacingOccurrences(of: "-", with: " ")
+//                        prettyPokemonName = prettyPokemonName.capitalized
+//                        self.pokemonNameLabel.text = prettyPokemonName
+//                        self.pokemonDexNumberLabel.text = "National Dex: #\(pokemon.number)"
+//
+//                        if pokemon.types.count == 2 {
+//                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
+//                            self.pokemonTypeTwoLabel.text = pokemon.types[1].name.capitalized
+//                        }
+//                        else if pokemon.types.count == 1 {
+//                            self.pokemonTypeOneLabel.text = pokemon.types[0].name.capitalized
+//                            self.pokemonTypeTwoLabel.text = " "
+//                        }
+//                        else {
+//                            self.pokemonTypeOneLabel.text = " "
+//                            self.pokemonTypeTwoLabel.text = " "
+//                        }
+                    
+//                        self.statViewController?.setStats(attackStat: pokemon.stats["attack"]!.baseStat, healthStat: pokemon.stats["hp"]!.baseStat, defenseStat: pokemon.stats["defense"]!.baseStat, specialAttackStat: pokemon.stats["special-attack"]!.baseStat, specialDefenseStat: pokemon.stats["special-defense"]!.baseStat, speedStat: pokemon.stats["speed"]!.baseStat)
+                    
                         // downloads the sprite and displays it in the imageview
-                        self.downloadAndDisplaySprite(pokemonSpriteUrl: pokemon.sprites.frontDefault)
-                        
-                        self.typeEffectivenessViewController?.setEffectivenessValues(normalEffectiveness: pokemon.typeEffectiveness["normal"]!, fireEffectiveness: pokemon.typeEffectiveness["fire"]!, waterEffectiveness: pokemon.typeEffectiveness["water"]!, fightingEffectiveness: pokemon.typeEffectiveness["fighting"]!, grassEffectiveness: pokemon.typeEffectiveness["grass"]!, flyingEffectiveness: pokemon.typeEffectiveness["flying"]!, electricEffectiveness: pokemon.typeEffectiveness["electric"]!, poisonEffectiveness: pokemon.typeEffectiveness["poison"]!, psychicEffectiveness: pokemon.typeEffectiveness["psychic"]!, groundEffectiveness: pokemon.typeEffectiveness["ground"]!, iceEffectiveness: pokemon.typeEffectiveness["ice"]!, rockEffectiveness: pokemon.typeEffectiveness["rock"]!, dragonEffectiveness: pokemon.typeEffectiveness["dragon"]!, bugEffectiveness: pokemon.typeEffectiveness["bug"]!, darkEffectiveness: pokemon.typeEffectiveness["dark"]!, ghostEffectiveness: pokemon.typeEffectiveness["ghost"]!, fairyEffectiveness: pokemon.typeEffectiveness["fairy"]!, steelEffectiveness: pokemon.typeEffectiveness["steel"]!)
-                    }
-                    else    {
-                        let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
-                        self.pokemonSearchField.text = ""
-                        failBanner.show()
-                    }
+//                        self.downloadAndDisplaySprite(pokemonSpriteUrl: pokemon.sprites.frontDefault)
+//
+//                        self.typeEffectivenessViewController?.setEffectivenessValues(normalEffectiveness: pokemon.typeEffectiveness["normal"]!, fireEffectiveness: pokemon.typeEffectiveness["fire"]!, waterEffectiveness: pokemon.typeEffectiveness["water"]!, fightingEffectiveness: pokemon.typeEffectiveness["fighting"]!, grassEffectiveness: pokemon.typeEffectiveness["grass"]!, flyingEffectiveness: pokemon.typeEffectiveness["flying"]!, electricEffectiveness: pokemon.typeEffectiveness["electric"]!, poisonEffectiveness: pokemon.typeEffectiveness["poison"]!, psychicEffectiveness: pokemon.typeEffectiveness["psychic"]!, groundEffectiveness: pokemon.typeEffectiveness["ground"]!, iceEffectiveness: pokemon.typeEffectiveness["ice"]!, rockEffectiveness: pokemon.typeEffectiveness["rock"]!, dragonEffectiveness: pokemon.typeEffectiveness["dragon"]!, bugEffectiveness: pokemon.typeEffectiveness["bug"]!, darkEffectiveness: pokemon.typeEffectiveness["dark"]!, ghostEffectiveness: pokemon.typeEffectiveness["ghost"]!, fairyEffectiveness: pokemon.typeEffectiveness["fairy"]!, steelEffectiveness: pokemon.typeEffectiveness["steel"]!)
+//                    }
+//                    else {
+//                        let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
+//                        self.pokemonSearchField.text = ""
+//                        failBanner.show()
+//                    }
                 }
-                
+            
             })
         }
     }
@@ -295,7 +458,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
         if let partialString = self.pokemonSearchField?.text {
             self.autocompleteSuggestions = findPokemonSubString(partialString)
             
-            print("number of suggestions: \(self.autocompleteSuggestions.count)")
+            //print("number of suggestions: \(self.autocompleteSuggestions.count)")
             
             if self.autocompleteSuggestions.count > 5 {
                 self.autocompleteSuggestions = Array(self.autocompleteSuggestions.prefix(upTo: 5))
@@ -307,7 +470,7 @@ class PokedexViewController: UIViewController, UITextFieldDelegate, UITableViewD
             newTableHeight = 49 * (5 - self.autocompleteSuggestions.count)
             
             if self.autocompleteSuggestions.isEmpty || partialString.isEmpty {
-                print("autocomplete suggestions is empty or partial string is empty")
+                //print("autocomplete suggestions is empty or partial string is empty")
                 self.autocompleteTableView.isHidden = true
                 self.autocompleteTableView.frame = CGRect(x: self.autocompleteTableView.frame.origin.x,
                                                           y: self.autocompleteTableView.frame.origin.y,

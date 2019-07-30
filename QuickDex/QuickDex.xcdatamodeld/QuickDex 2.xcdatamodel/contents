@@ -3,7 +3,6 @@
     <entity name="Pokemon" representedClassName="Pokemon" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="numberId" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
-        <attribute name="onTeam" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="typeOne" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="typeTwo" optional="YES" attributeType="String" defaultValueString="&quot;&quot;" syncable="YES"/>
         <attribute name="uniqueId" optional="YES" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
@@ -27,9 +26,9 @@
         <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="typeEffectiveness" inverseEntity="Pokemon" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="178"/>
-        <element name="Stat" positionX="198.66796875" positionY="97.16015625" width="128" height="88"/>
+        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="165"/>
         <element name="SpriteUrl" positionX="203.46484375" positionY="21.72265625" width="128" height="88"/>
+        <element name="Stat" positionX="198.66796875" positionY="97.16015625" width="128" height="88"/>
         <element name="Type" positionX="199.140625" positionY="188.86328125" width="128" height="88"/>
     </elements>
 </model>
