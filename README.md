@@ -19,3 +19,12 @@ Calls are made to the [PokeApi](https://pokeapi.co/). When the API returns the P
 The data received is then displayed for the user
 
 ![pokedex main view](https://github.com/ppourmand/QuickDex/blob/master/screenshots/pokedex.png)
+
+On the main page you can see the type effectiveness of the searched pokemon (how it fares against the different types)
+
+![type effectiveness](https://github.com/ppourmand/QuickDex/blob/master/screenshots/effectiveness.png)
+
+You can also see how your team matches up against the Pokémon you searched:
+
+
+![type effectiveness](https://github.com/ppourmand/QuickDex/blob/master/screenshots/matchup.png)
