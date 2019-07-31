@@ -16,4 +16,6 @@ where you can choose your team and compare type effectivenesses against other Po
 # How does it work?
 Calls are made to the [PokeApi](https://pokeapi.co/). When the API returns the Pokémon information as a JSON, the app parses the data and saves it to the Core Data model created. This helps cache the data of a Pokémon so we aren't hammering the API (Pokémon data doesn't really change all too often).
 
-The data received is then displayed for the user ![pokedex main view](https://github.com/ppourmand/QuickDex/blob/master/screenshots/pokedex.png)
+The data received is then displayed for the user
+
+![pokedex main view](https://github.com/ppourmand/QuickDex/blob/master/screenshots/pokedex.png)
