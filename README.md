@@ -40,6 +40,5 @@ Yes! There is indeed a dark mode. Yes I know iOS 13 will be coming with a system
 
 ![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/dark-pokedex.png)
 ![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/dark-pokedex-auto.png)
-![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/team-auto.png)
 ![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/dark-team-auto.png)_
 ![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/dark-settings.png)
