@@ -28,7 +28,6 @@
 		DFD7B65222A72E90009A6032 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFD7B65022A72E90009A6032 /* LaunchScreen.storyboard */; };
 		DFD7B65D22A72E90009A6032 /* QuickDexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B65C22A72E90009A6032 /* QuickDexTests.swift */; };
 		DFD7B66822A72E90009A6032 /* QuickDexUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B66722A72E90009A6032 /* QuickDexUITests.swift */; };
-		DFD7B67622A7396F009A6032 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B67522A7396F009A6032 /* Pokemon.swift */; };
 		DFD7B67822A77075009A6032 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFD7B67722A77075009A6032 /* SwiftyJSON.framework */; };
 		DFD7B68122AB1DEC009A6032 /* PokedexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */; };
 		DFD7B68322AB22BD009A6032 /* PokemonStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */; };
@@ -83,9 +82,8 @@
 		DFD7B66322A72E90009A6032 /* QuickDexUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuickDexUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFD7B66722A72E90009A6032 /* QuickDexUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickDexUITests.swift; sourceTree = "<group>"; };
 		DFD7B66922A72E90009A6032 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DFD7B67522A7396F009A6032 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		DFD7B67722A77075009A6032 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PokedexViewController.swift; path = ../PokedexViewController.swift; sourceTree = "<group>"; };
+		DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokedexViewController.swift; sourceTree = "<group>"; };
 		DFD7B68222AB22BD009A6032 /* PokemonStatsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonStatsTableViewController.swift; sourceTree = "<group>"; };
 		DFD7B68422AB465A009A6032 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		DFD7B68622AB46B2009A6032 /* PokeApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeApi.swift; sourceTree = "<group>"; };
@@ -162,7 +160,6 @@
 				DFD7B64422A72E8F009A6032 /* AppDelegate.swift */,
 				DFD7B68022AB1DEC009A6032 /* PokedexViewController.swift */,
 				DFD7B68622AB46B2009A6032 /* PokeApi.swift */,
-				DFD7B67522A7396F009A6032 /* Pokemon.swift */,
 				DFD7B64822A72E8F009A6032 /* Main.storyboard */,
 				DF48980F22BC2E8E008587EF /* MatchupTableViewController.swift */,
 				DF59FEBF22B8356500CDAE93 /* TeamViewController.swift */,
@@ -357,7 +354,6 @@
 				DF5ADB6E22E7AF5B00594C84 /* Type+CoreDataProperties.swift in Sources */,
 				DF5ADB6A22E7AF5B00594C84 /* SpriteUrl+CoreDataProperties.swift in Sources */,
 				DF0F1C7822D53D3200072611 /* SettingsTableViewController.swift in Sources */,
-				DFD7B67622A7396F009A6032 /* Pokemon.swift in Sources */,
 				DF5ADB6722E7AF5B00594C84 /* Pokemon+CoreDataClass.swift in Sources */,
 				DF5ADB6922E7AF5B00594C84 /* SpriteUrl+CoreDataClass.swift in Sources */,
 				DFD7B68722AB46B2009A6032 /* PokeApi.swift in Sources */,

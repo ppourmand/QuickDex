@@ -1,5 +1,5 @@
 github "Alamofire/Alamofire" "4.8.2"
-github "Daltron/NotificationBanner" "07c1c0092d5e1a26bb616e74f3937f669e974507"
+github "Daltron/NotificationBanner" "b7ad7a61d06a707d90f299d39c2b906710860884"
 github "SnapKit/SnapKit" "5.0.0"
 github "SwiftyJSON/SwiftyJSON" "4.3.0"
 github "cbpowell/MarqueeLabel" "4.0.0"

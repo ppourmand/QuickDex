@@ -43,12 +43,8 @@ class PokeApi: NSObject {
                 // if the count of entities after we've filtered for predicate matching on name has anything
                 // in it, don't call the API and just return since we've already saved the pokemon
                 if result.count == 1 {
-                    print("pokemon with id \(convertedPokemonName) is already saved to core data")
                     completionHandler(true, convertedPokemonName)
                     return
-                }
-                else {
-                    print("no such pokemon saved, calling API now")
                 }
                 
             } catch let error as NSError {
@@ -153,9 +149,6 @@ class PokeApi: NSObject {
         
     }
     
-    // TODO: create function that adds move data to the pokemon
-    
-    
     private func isValidInput(_ inputPokemon: String) -> Bool{
         // we should do input validation here
         // if it contains any special character, return bad input
@@ -192,6 +185,7 @@ class PokeApi: NSObject {
         return true
     }
     
+    // removes characters and converts string to something usable for the API call
     private func convertUserInputToApiReadable(_ userInput: String) -> String {
         var convertedOutput = ""
         convertedOutput = userInput.replacingOccurrences(of: " ", with: "-").lowercased()
@@ -201,6 +195,7 @@ class PokeApi: NSObject {
         return convertedOutput
     }
     
+    // based on pokemon's type(s), set proper weakness values
     func setWeaknesses(pokemonToSet: Pokemon, _ managedContext: NSManagedObjectContext ) {
         let types = [pokemonToSet.typeOne, pokemonToSet.typeTwo]
         
@@ -437,5 +432,4 @@ class PokeApi: NSObject {
         pokemonToSet.addToTypeEffectiveness(dark)
         pokemonToSet.addToTypeEffectiveness(unknown)
     }
-   
 }

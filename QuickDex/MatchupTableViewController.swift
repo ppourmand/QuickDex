@@ -26,10 +26,7 @@ class MatchupTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.view.translatesAutoresizingMaskIntoConstraints = false
-//
-//        // no extra bs cells
         self.tableView.tableFooterView = UIView()
-//
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
@@ -77,7 +74,6 @@ class MatchupTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return pokemonOnTeam.count
         return 6
     }
     
@@ -178,12 +174,8 @@ class MatchupTableViewController: UITableViewController {
     }
     
     func createAttributedString(_ typeString: String, _ colorToSet: UIColor) -> NSAttributedString {
-        
-        let firstAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: colorToSet]
-        
+        let firstAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: colorToSet]
         let attributedString = NSAttributedString(string: typeString.capitalized, attributes: firstAttributes)
-        
         return attributedString
         
     }

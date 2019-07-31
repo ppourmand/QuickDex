@@ -104,26 +104,6 @@ class TypesTableViewController: UITableViewController {
     }
     
     func setEffectivenessValues(normalEffectiveness: Double, fireEffectiveness: Double, waterEffectiveness: Double, fightingEffectiveness: Double, grassEffectiveness: Double, flyingEffectiveness: Double, electricEffectiveness: Double, poisonEffectiveness: Double, psychicEffectiveness: Double, groundEffectiveness: Double, iceEffectiveness: Double, rockEffectiveness: Double, dragonEffectiveness: Double, bugEffectiveness: Double, darkEffectiveness: Double, ghostEffectiveness: Double, fairyEffectiveness: Double, steelEffectiveness: Double) {
-        
-//        self.normalEffectivenessLabel.text = "\(normalEffectiveness)x"
-//        self.fireEffectivenessLabel.text = "\(fireEffectiveness)x"
-//        self.waterEffectivenessLabel.text = "\(waterEffectiveness)x"
-//        self.fightingEffectivenessLabel.text = "\(fightingEffectiveness)x"
-//        self.grassEffectivenessLabel.text = "\(grassEffectiveness)x"
-//        self.flyingEffectivenessLabel.text = "\(flyingEffectiveness)x"
-//        self.electricEffectivenessLabel.text = "\(electricEffectiveness)x"
-//        self.poisonEffectivenessLabel.text = "\(poisonEffectiveness)x"
-//        self.psychicEffectivenessLabel.text = "\(psychicEffectiveness)x"
-//        self.groundEffectivenessLabel.text = "\(groundEffectiveness)x"
-//        self.iceEffectivenessLabel.text = "\(iceEffectiveness)x"
-//        self.rockEffectivenessLabel.text = "\(rockEffectiveness)x"
-//        self.dragonEffectivenessLabel.text = "\(dragonEffectiveness)x"
-//        self.bugEffectivenessLabel.text = "\(bugEffectiveness)x"
-//        self.darkEffectivenessLabel.text = "\(darkEffectiveness)x"
-//        self.ghostEffectivenessLabel.text = "\(ghostEffectiveness)x"
-//        self.fairyEffectivenessLabel.text = "\(fairyEffectiveness)x"
-//        self.steelEffectivenessLabel.text = "\(steelEffectiveness)x"
-        
         self.setColor(normalEffectiveness, self.normalEffectivenessLabel)
         self.setColor(fireEffectiveness, self.fireEffectivenessLabel)
         self.setColor(waterEffectiveness, self.waterEffectivenessLabel)

@@ -21,15 +21,12 @@ class PokemonCell: UITableViewCell {
 }
 
 class TeamViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    
     @IBOutlet weak var teamTableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
     var pokemonOnTeam: [Pokemon] = []
     var names: [String] = []
     var lettersTypedSoFar: String = ""
     var oldCursorPosition: Int = 0
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,26 +112,11 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                                                     // 4
                                                     do {
                                                         let result = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
-                                                        print(result)
                                                         self.pokemonOnTeam = result
-                                                        print("Appended pokemon and saved!!")
                                                     } catch let error as NSError {
                                                         print("Could not save. \(error), \(error.userInfo)")
                                                     }
-//                                                    let result = try managedContext.fetch(pokemonFetchRequest) as! [Pokemon]
-//
-//                                                    print(result)
-                                                    
-//                                                    if let pokemon = pokemon {
-//                                                        print(pokemon.uniqueId)
-//                                                        self.save(pokemonToSave: pokemon)
-//                                                        self.teamTableView.reloadData()
-//                                                    }
-//                                                    else {
-//                                                        let failBanner = StatusBarNotificationBanner(title: "Unable to find Pokemon", style: .danger)
-//                                                        failBanner.show()
-//                                                    }
-                                                    print("gj saved ur shit to team")
+
                                                     self.teamTableView.reloadData()
                                                 }
 
@@ -168,36 +150,24 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        //print("--- text field edited ---")
         var autocompleteSuggestions: [String] = []
 
         if let selectedRange = textField.selectedTextRange {
             let cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.end)
             oldCursorPosition = cursorPosition - oldCursorPosition
-//            print("cursor position: \(cursorPosition)")
-//            print("old cursor position: \(oldCursorPosition)")
-            
 
-            
             if let partialString = textField.text {
-               // print("partial string: \(partialString)")
                 if !partialString.isEmpty{
                     self.lettersTypedSoFar = String(partialString[..<partialString.index(partialString.startIndex, offsetBy: cursorPosition)])
-                    //print("letters typed so far: \(self.lettersTypedSoFar)")
                     autocompleteSuggestions = findPokemonSubString(self.lettersTypedSoFar)
                 }
             }
             
-            
-            
             if let suggestedText = autocompleteSuggestions.first {
-               // print("suggested text: \(suggestedText)")
                 let typedText = NSMutableAttributedString(string: self.lettersTypedSoFar)
                 let greyedOutSuggestedText = NSMutableAttributedString(string: String(suggestedText.suffix(suggestedText.count - self.lettersTypedSoFar.count)), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
                 
                 typedText.append(greyedOutSuggestedText)
-                
-                
                 textField.attributedText = typedText
             }
             else {
@@ -309,8 +279,6 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     // delete pokemon from core data
     func delete(_ pokemonToDelete: Pokemon) {
-        print("attempting to delete")
-
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
                 return
