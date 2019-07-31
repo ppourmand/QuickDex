@@ -1,3 +1,5 @@
+![](https://github.com/ppourmand/QuickDex/blob/master/screenshots/demo.gif)
+
 # Quick Dex - An exercise in learning iOS and creating a Pokedex tool
 This project was started with several goals in mind: 
   1. Learn enough Swift and iOS development to create an app from scratch to completion
